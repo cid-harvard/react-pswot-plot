@@ -1,10 +1,30 @@
 import React from 'react'
+import PSwotPlot, {ScatterPlotDatum} from 'react-pswot-plot'
+import RawData from './data/hefei_employees.json';
+import styled from 'styled-components';
 
-import { ExampleComponent } from 'react-pswot-plot'
-import 'react-pswot-plot/dist/index.css'
+const Root = styled.div`
+  width: 100vw;
+  height: 100vh;
+`;
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
+  const data: ScatterPlotDatum[] = RawData.map(d => {
+    return {
+      label: d.naics.toString(),
+      x: d.rca_emp,
+      y: d.density_emp,
+    }
+  })
+
+  return (
+    <Root>
+      <PSwotPlot
+        id={'react-pswot-plot-demo'}
+        data={data}
+      />
+    </Root>
+  )
 }
 
 export default App
