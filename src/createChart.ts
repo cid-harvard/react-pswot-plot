@@ -26,13 +26,15 @@ interface Input {
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   labelFont?: string;
   zeroAxisLabel?: string;
+  axisLabelColor?: string;
+  quadrantLabelColor?: string;
 }
 
 export default (input: Input) => {
   const {
     svg, data, size, axisLabels, axisMinMax,
     averageLineText, quadrantLabels, labelFont,
-    zeroAxisLabel,
+    zeroAxisLabel, axisLabelColor, quadrantLabelColor,
   } = input;
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
@@ -53,14 +55,13 @@ export default (input: Input) => {
   svg.append("defs").append("marker")
     .attr("id", "arrowhead")
     .attr("viewBox", "0 -5 10 10")
-    // .attr("refX", 15)
     .attr("refY", 2)
     .attr("markerWidth", 4)
     .attr("markerHeight", 4)
     .attr("orient", "auto-start-reverse")
   .append("path")
     .attr("d", "M0,0 L4,2 0,4")
-    .attr('fill', '#333333');
+    .attr('fill', axisLabelColor ? axisLabelColor : '#333333');
 
   const scatterplot = svg
     .append('g')
@@ -100,6 +101,7 @@ export default (input: Input) => {
       .attr('class', bottomLeftClassName)
       .attr('y', height + (margin.top * 1.5))
       .attr('x', xScale(1) - 18)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'end')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('font-size', 'clamp(16px, 1.5vw, 18px)')
@@ -111,6 +113,7 @@ export default (input: Input) => {
       .attr('class', bottomRightClassName)
       .attr('y', height + (margin.top * 1.5))
       .attr('x', xScale(1) + 18)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'start')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('font-size', 'clamp(16px, 1.5vw, 18px)')
@@ -144,12 +147,13 @@ export default (input: Input) => {
     .attr('transform', 'rotate(-90)')
       .attr('y', margin.right / 2)
       .attr('x', 0 - (height / 2 + margin.top + margin.bottom))
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .attr('dy', '1.25em')
       .style('text-anchor', 'middle')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('text-transform', 'uppercase')
 
-  const leftAxisLabelUp = leftAxisLabel.append('tspan')
+  leftAxisLabel.append('tspan')
       .attr('dx', arrowPadding * 3)
       .style('font-size', 'clamp(12px, 1.5vw, 14px)')
       .text(axisLabels && axisLabels.leftDown ? axisLabels.leftDown : '');
@@ -161,7 +165,7 @@ export default (input: Input) => {
       .attr('dx', arrowPadding * 4.5)
       .text(axisLabels && axisLabels.left ? axisLabels.left : '');
 
-  const leftAxisLabelDown = leftAxisLabel.append('tspan')
+  leftAxisLabel.append('tspan')
       .attr('dx', arrowPadding * 4.5)
       .style('font-size', 'clamp(12px, 1.5vw, 14px)')
       .text(axisLabels && axisLabels.leftUp ? axisLabels.leftUp : '');
@@ -182,26 +186,7 @@ export default (input: Input) => {
       .style('pointer-events', 'none')
       .attr("marker-end", "url(#arrowhead)")
       .attr("marker-start", "url(#arrowhead)")
-
-
-    // svg
-    //   .append('text')
-    //   .style('transform', 'rotate(-90)')
-    //     .attr('class', leftAxisClassName)
-    //     .attr('y', start - (arrowPadding * 5))
-    //     .attr('x', 0)
-    //     // .attr('x', 0 - (height / 2 + margin.top))
-    //     .attr('dy', '1.25em')
-    //     .style('text-anchor', 'start')
-    //     .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-    //     .style('font-size', 'clamp(12px, 1.5vw, 14px)')
-    //     .style('text-transform', 'uppercase')
-    //     .text(axisLabels && axisLabels.leftUp ? axisLabels.leftUp : '');
   }
-
-  leftAxisLabelUp.style('display', 'block');
-  leftAxisLabelDown.style('display', 'block');
-
 
   createBeeswarm({
     container: beeswarm,
@@ -211,7 +196,8 @@ export default (input: Input) => {
     label: quadrantLabels ? quadrantLabels.V : undefined,
     labelFont, maxY,
     zeroAxisLabel,
-    margin,
+    margin, axisLabelColor,
+    quadrantLabelColor,
   });
 
   createScatterPlot({
@@ -221,7 +207,8 @@ export default (input: Input) => {
     margin,
     averageLineText, quadrantLabels, labelFont,
     xScale, yScale,
-    axisMinMax: {minX, maxX, minY, maxY}
+    axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor,
+    quadrantLabelColor,
   });
 
 

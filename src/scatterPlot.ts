@@ -24,13 +24,15 @@ interface Input {
   averageLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
   labelFont?: string;
+  axisLabelColor: string | undefined;
+  quadrantLabelColor: string | undefined;
 }
 
 const createScatterPlot = (input: Input) => {
   const {
     container, size: {width, height},
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
-    axisMinMax: {minX, maxX, minY, maxY},
+    axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor, quadrantLabelColor,
   } = input;
 
   // Add X axis
@@ -46,6 +48,7 @@ const createScatterPlot = (input: Input) => {
     xAxis.selectAll('.tick line')
       .attr('stroke', 'none')
     xAxis.selectAll('text')
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', '0.75')
       .style('font-size', 'clamp(7px, 1.25vw, 12px)')
 
@@ -105,6 +108,7 @@ const createScatterPlot = (input: Input) => {
     container.append('text')
       .attr('x',xScale(1) + 4)
       .attr('y',-10)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('font-size', 'clamp(12px, 1.5vw, 16px)')
@@ -115,7 +119,7 @@ const createScatterPlot = (input: Input) => {
   }
 
   if (quadrantLabels !== undefined) {
-    const getLabel = appendQuadrantLabel(container, labelFont);
+    const getLabel = appendQuadrantLabel(container, labelFont, quadrantLabelColor);
     if (quadrantLabels.I !== undefined) {
       const xVal = width - 4;
       const yVal = yScale(maxY) + 20;

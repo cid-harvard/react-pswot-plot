@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 
 export const appendQuadrantLabel =
-  (container: d3.Selection<any, unknown, null, undefined>, labelFont: string | undefined) =>
+  (container: d3.Selection<any, unknown, null, undefined>, labelFont: string | undefined, color: string | undefined) =>
     (xVal: number, yVal: number, textParts: string[], textAnchor: string) => {
       const label = container.append('text')
           .style('text-anchor', textAnchor)
@@ -12,6 +12,7 @@ export const appendQuadrantLabel =
           .style('text-transform', 'uppercase')
           .style('pointer-events', 'none')
           .style('dominant-baseline', 'bottom')
+          .attr('fill', color ? color : '#333')
           .attr('x', xVal)
           .attr('y', yVal);
 

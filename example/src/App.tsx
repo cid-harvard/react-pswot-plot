@@ -38,6 +38,8 @@ const App = () => {
           bottomLeft: 'Low Relative Advantage',
           bottomRight: 'High Relative Advantage',
         }}
+        axisLabelColor={'#333'}
+        quadrantLabelColor={'#f8966f'}
       />
     </Root>
   )

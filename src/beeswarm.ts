@@ -18,6 +18,8 @@ interface Input {
     bottom: number,
     left: number,
   }
+  axisLabelColor: string | undefined;
+  quadrantLabelColor: string | undefined;
 }
 
 interface ForceDatum extends Datum {
@@ -28,7 +30,7 @@ interface ForceDatum extends Datum {
 const createBeeswarm = (input: Input) => {
   const {
     container, size: {width, height}, yScale, label, labelFont, maxY, zeroAxisLabel,
-    margin,
+    margin, axisLabelColor, quadrantLabelColor,
   } = input;
 
   const data: ForceDatum[] = input.data.map(d => ({...d, orginalX: d.x, orginalY: d.y}));
@@ -57,6 +59,7 @@ const createBeeswarm = (input: Input) => {
     container.append('text')
       .attr('x', 0)
       .attr('y', height + (margin.top * 1.5))
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('font-size', 'clamp(12px, 1.5vw, 16px)')
@@ -84,7 +87,7 @@ const createBeeswarm = (input: Input) => {
       .attr("cy", d => yScale(d.orginalY));
 
   if (label !== undefined) {
-    const getLabel = appendQuadrantLabel(container, labelFont);
+    const getLabel = appendQuadrantLabel(container, labelFont, quadrantLabelColor);
 
     const textParts = (label as string).split('\n');
     const xVal = width / 2;
