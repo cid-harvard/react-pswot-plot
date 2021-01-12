@@ -22,6 +22,13 @@ const App = () => {
       <PSwotPlot
         id={'react-pswot-plot-demo'}
         data={data}
+        averageLineText={'Relative Advantage = 1'}
+        quadrantLabels={{
+          I: 'Strength',
+          II: 'Opportunity',
+          III: 'Threat',
+          IV: 'Weak',
+        }}
       />
     </Root>
   )

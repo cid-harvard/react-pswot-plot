@@ -30,14 +30,13 @@ interface Props {
     minY?: number,
     maxY?: number,
   };
-  showAverageLines?: boolean;
-  averageLineText?: {left?: string, bottom?: string};
+  averageLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
 }
 
 export const PSwotPlot = (props: Props) => {
   const {
-    id, data, axisLabels, axisMinMax, showAverageLines, averageLineText, quadrantLabels,
+    id, data, axisLabels, axisMinMax, averageLineText, quadrantLabels,
   } = props;
 
   const sizingNodeRef = useRef<HTMLDivElement | null>(null);
@@ -68,7 +67,6 @@ export const PSwotPlot = (props: Props) => {
         },
         axisLabels,
         axisMinMax,
-        showAverageLines,
         averageLineText,
         quadrantLabels,
       });

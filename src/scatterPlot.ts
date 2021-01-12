@@ -30,15 +30,14 @@ interface Input {
     minY?: number,
     maxY?: number,
   };
-  showAverageLines?: boolean;
-  averageLineText?: {left?: string, bottom?: string};
+  averageLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
   labelFont?: string;
 }
 
 export default (input: Input) => {
   const {
-    svg, data, size, axisLabels, axisMinMax, showAverageLines,
+    svg, data, size, axisLabels, axisMinMax,
     averageLineText, quadrantLabels, labelFont,
   } = input;
 
@@ -67,7 +66,7 @@ export default (input: Input) => {
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
 
   const minX = 0.001;
-  const maxX = 200;
+  const maxX = 256;
   const minY = rawMinY ? Math.floor(rawMinY) : 0;
   const maxY = rawMaxY ? Math.ceil(rawMaxY) : 0;
 
@@ -117,47 +116,35 @@ export default (input: Input) => {
           .tickFormat(''),
       );
 
-  if (showAverageLines) {
-    container.append('line')
-      .attr('x1',xScale(minX))
-      .attr('x2',xScale(maxX))
-      .attr('y1',yScale(maxY / 2) + 0.5)
-      .attr('y2',yScale(maxY / 2) + 0.5)
-      .attr('stroke-width', '1px')
-      .style('pointer-events', 'none')
-      .attr('stroke', '#9e9e9e');
-    container.append('line')
-      .attr('x1',xScale(maxX / 2) + 0.5)
-      .attr('x2',xScale(maxX / 2) + 0.5)
-      .attr('y1',yScale(minY))
-      .attr('y2',yScale(maxY))
-      .attr('stroke-width', '1px')
-      .style('pointer-events', 'none')
-      .attr('stroke', '#9e9e9e');
-  }
+  // add quadrant lines
+  container.append('line')
+    .attr('x1',xScale(minX))
+    .attr('x2',xScale(maxX))
+    .attr('y1',yScale(0))
+    .attr('y2',yScale(0))
+    .attr('stroke-width', '2px')
+    .style('pointer-events', 'none')
+    .attr('stroke', '#333');
+  container.append('line')
+    .attr('x1',xScale(1))
+    .attr('x2',xScale(1))
+    .attr('y1',yScale(minY))
+    .attr('y2',0 - margin.top)
+    .attr('stroke-width', '2px')
+    .style('pointer-events', 'none')
+    .attr('stroke', '#333');
 
   if (averageLineText) {
-    if (averageLineText.left) {
-      container.append('text')
-        .attr('x',xScale(minX) + 4)
-        .attr('y',yScale(maxY / 2) + 12)
-        .style('opacity', 0.8)
-        .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-        .style('font-size', '12px')
-        .style('pointer-events', 'none')
-        .text(averageLineText.left);
-    }
-    if (averageLineText.bottom) {
-      container.append('text')
-        .attr('x',xScale(maxX / 2) + 4)
-        .attr('y',yScale(minY) - 6)
-        .style('opacity', 0.8)
-        .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-        .style('font-size', '12px')
-        .style('pointer-events', 'none')
-        .text(averageLineText.bottom);
+    container.append('text')
+      .attr('x',xScale(1) + 4)
+      .attr('y',-10)
+      .style('opacity', 0.8)
+      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
+      .style('font-size', '16px')
+      .style('font-weight', '600')
+      .style('pointer-events', 'none')
+      .text(averageLineText);
 
-    }
   }
 
   const appendQuadrantLabel = (xVal: number, yVal: number, textParts: string[], textAnchor: string) => {
@@ -165,7 +152,9 @@ export default (input: Input) => {
         .style('text-anchor', textAnchor)
         .style('opacity', 0.8)
         .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-        .style('font-size', '12px')
+        .style('font-size', '18px')
+        .style('font-weight', '600')
+        .style('text-transform', 'uppercase')
         .style('pointer-events', 'none')
         .style('dominant-baseline', 'bottom')
         .attr('x', xVal)
@@ -188,13 +177,13 @@ export default (input: Input) => {
   if (quadrantLabels !== undefined) {
     if (quadrantLabels.I !== undefined) {
       const xVal = width - 4;
-      const yVal = yScale(maxY) + 12;
+      const yVal = yScale(maxY) + 16;
       const textParts = (quadrantLabels.I as string).split('\n');
       appendQuadrantLabel(xVal, yVal, textParts, 'end');
     }
     if (quadrantLabels.II !== undefined) {
       const xVal = xScale(minX) + 4;
-      const yVal = yScale(maxY) + 12;
+      const yVal = yScale(maxY) + 16;
       const textParts = (quadrantLabels.II as string).split('\n');
       appendQuadrantLabel(xVal, yVal, textParts, 'start');
     }
