@@ -24,7 +24,13 @@ const SizingElm = styled.div`
 interface Props {
   id: string;
   data: Datum[];
-  axisLabels?: {left?: string, bottom?: string};
+  axisLabels?: {
+    left?: string,
+    leftUp?: string
+    leftDown?: string
+    bottomLeft?: string
+    bottomRight?: string
+  };
   axisMinMax?: {
     minX?: number,
     maxX?: number,

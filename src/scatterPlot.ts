@@ -9,7 +9,6 @@ interface Input {
   size: Dimensions;
   xScale: d3.ScaleLogarithmic<number, number, never>;
   yScale: d3.ScaleLinear<number, number, never>;
-  axisLabels?: {left?: string, bottom?: string};
   margin: {
     top: number,
     right: number,
@@ -29,7 +28,7 @@ interface Input {
 
 const createScatterPlot = (input: Input) => {
   const {
-    container, axisLabels, size: {width, height},
+    container, size: {width, height},
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY},
   } = input;
@@ -218,26 +217,6 @@ const createScatterPlot = (input: Input) => {
         //       .style('display', 'none');
         // });
   }
-
-
-  // append X axis label
-  container
-    .append('text')
-    .attr('transform', `translate(${width / 2 + margin.left}, ${height + margin.bottom + (margin.top / 2)})`)
-      .style('text-anchor', 'middle')
-      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .text(axisLabels && axisLabels.bottom ? axisLabels.bottom : '');
-
-  // append Y axis label
-  container
-    .append('text')
-    .attr('transform', 'rotate(-90)')
-      .attr('y', margin.right / 2)
-      .attr('x', 0 - (height / 2 + margin.top))
-      .attr('dy', '0.75em')
-      .style('text-anchor', 'middle')
-      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .text(axisLabels && axisLabels.left ? axisLabels.left : '');
 }
 
 export default createScatterPlot;

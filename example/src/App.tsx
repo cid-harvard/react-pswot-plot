@@ -31,6 +31,13 @@ const App = () => {
           V: 'Potential',
         }}
         zeroAxisLabel={'Relative Advantage = 0'}
+        axisLabels={{
+          left: 'Predicted Density Change',
+          leftUp: 'Growing',
+          leftDown: 'Decreasing',
+          bottomLeft: 'Low Relative Advantage',
+          bottomRight: 'High Relative Advantage',
+        }}
       />
     </Root>
   )
