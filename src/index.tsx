@@ -32,12 +32,14 @@ interface Props {
     maxY?: number,
   };
   averageLineText?: string;
-  quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
+  zeroAxisLabel?: string;
+  quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
 }
 
 export const PSwotPlot = (props: Props) => {
   const {
     id, data, axisLabels, axisMinMax, averageLineText, quadrantLabels,
+    zeroAxisLabel,
   } = props;
 
   const sizingNodeRef = useRef<HTMLDivElement | null>(null);
@@ -70,6 +72,7 @@ export const PSwotPlot = (props: Props) => {
         axisMinMax,
         averageLineText,
         quadrantLabels,
+        zeroAxisLabel,
       });
     }
     return () => {

@@ -28,7 +28,9 @@ const App = () => {
           II: 'Opportunity',
           III: 'Threat',
           IV: 'Weak',
+          V: 'Potential',
         }}
+        zeroAxisLabel={'Relative Advantage = 0'}
       />
     </Root>
   )

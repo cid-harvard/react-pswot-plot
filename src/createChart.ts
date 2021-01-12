@@ -17,24 +17,26 @@ interface Input {
     maxY?: number,
   };
   averageLineText?: string;
-  quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
+  quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   labelFont?: string;
+  zeroAxisLabel?: string;
 }
 
 export default (input: Input) => {
   const {
     svg, data, size, axisLabels, axisMinMax,
     averageLineText, quadrantLabels, labelFont,
+    zeroAxisLabel,
   } = input;
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
 
   const filteredBeeswarmData = beeswarmData.filter(d => d.y > 0);
 
-  const margin = {top: 30, right: 30, bottom: 60, left: 60};
+  const margin = {top: 30, right: 15, bottom: 60, left: 50};
   const width = size.width - margin.left - margin.right;
   const height = size.height - margin.bottom - margin.top;
-  const beeswarmWidth = width * 0.15;
+  const beeswarmWidth = Math.max(110, Math.min(width * 0.15, 180))
   const scatterplotWidth = width - beeswarmWidth;
 
   // append the svg object to the body of the page
@@ -52,9 +54,8 @@ export default (input: Input) => {
       .attr('transform',
             'translate(' + (margin.left) + ',' + margin.top + ')');
 
-  const allYValues = data.map(({y}) => y);
+  const allYValues = scatterplotData.map(({y}) => y);
 
-  // const rawMaxX = axisMinMax && axisMinMax.maxX !== undefined ? axisMinMax.maxX : d3.max(allXValues);
   const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
 
@@ -73,6 +74,17 @@ export default (input: Input) => {
     .domain([minY, maxY])
     .range([ height, 0]);
 
+  createBeeswarm({
+    container: beeswarm,
+    data: [...filteredBeeswarmData],
+    size: {width: beeswarmWidth - (margin.right * 2), height},
+    xScale, yScale,
+    label: quadrantLabels ? quadrantLabels.V : undefined,
+    labelFont, maxY,
+    zeroAxisLabel,
+    margin,
+  });
+
   createScatterPlot({
     container: scatterplot,
     data: [...scatterplotData],
@@ -82,13 +94,6 @@ export default (input: Input) => {
     xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}
   });
-
-  createBeeswarm({
-    container: beeswarm,
-    data: [...filteredBeeswarmData],
-    size: {width: beeswarmWidth - margin.right, height},
-    xScale, yScale,
-  })
 
 
 };

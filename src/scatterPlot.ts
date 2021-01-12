@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import {Datum, Dimensions} from './types';
+import {appendQuadrantLabel} from './Utils';
 
 interface Input {
   container: d3.Selection<any, unknown, null, undefined>;
@@ -34,13 +35,26 @@ const createScatterPlot = (input: Input) => {
   } = input;
 
   // Add X axis
-  container.append('g')
+  const xAxis = container.append('g')
     .attr('transform', 'translate(0,' + height + ')')
-    .call(d3.axisBottom(xScale).ticks(10))
+    .call(
+      d3.axisBottom(xScale)
+        .ticks(10)
+        .tickFormat(t => parseFloat((t as number).toFixed(3)) as any)
+    )
+    xAxis.select('path')
+      .attr('stroke', 'none')
+    xAxis.selectAll('.tick line')
+      .attr('stroke', 'none')
+    xAxis.selectAll('text')
+      .style('opacity', '0.75')
+      .style('font-size', 'clamp(7px, 1.25vw, 12px)')
+
+
 
   // Add Y axis
-  container.append('g')
-    .call(d3.axisLeft(yScale));
+  // container.append('g')
+  //   .call(d3.axisLeft(yScale));
 
   // gridlines in x axis function
   const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(10);
@@ -94,64 +108,38 @@ const createScatterPlot = (input: Input) => {
       .attr('y',-10)
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', '16px')
+      .style('font-size', 'clamp(12px, 1.5vw, 16px)')
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(averageLineText);
 
   }
 
-  const appendQuadrantLabel = (xVal: number, yVal: number, textParts: string[], textAnchor: string) => {
-    const label = container.append('text')
-        .style('text-anchor', textAnchor)
-        .style('opacity', 0.8)
-        .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-        .style('font-size', '18px')
-        .style('font-weight', '600')
-        .style('text-transform', 'uppercase')
-        .style('pointer-events', 'none')
-        .style('dominant-baseline', 'bottom')
-        .attr('x', xVal)
-        .attr('y', yVal);
-
-      label.selectAll('tspan')
-        .data(textParts)
-        .enter()
-        .append('tspan')
-        .text(d => {
-          const text = d;
-          return text !== undefined ? text : '';
-        })
-        .attr('x', xVal)
-        .attr('dx', 0)
-        .attr('dy', (_d, i) => i !== 0 ? 15 : 0);
-
-  };
-
   if (quadrantLabels !== undefined) {
+    const getLabel = appendQuadrantLabel(container, labelFont);
     if (quadrantLabels.I !== undefined) {
       const xVal = width - 4;
-      const yVal = yScale(maxY) + 16;
+      const yVal = yScale(maxY) + 20;
       const textParts = (quadrantLabels.I as string).split('\n');
-      appendQuadrantLabel(xVal, yVal, textParts, 'end');
+      getLabel(xVal, yVal, textParts, 'end');
     }
     if (quadrantLabels.II !== undefined) {
       const xVal = xScale(minX) + 4;
-      const yVal = yScale(maxY) + 16;
+      const yVal = yScale(maxY) + 20;
       const textParts = (quadrantLabels.II as string).split('\n');
-      appendQuadrantLabel(xVal, yVal, textParts, 'start');
+      getLabel(xVal, yVal, textParts, 'start');
     }
     if (quadrantLabels.III !== undefined) {
       const textParts = (quadrantLabels.III as string).split('\n');
       const xVal = xScale(minX) + 4;
       const yVal = yScale(minY) - ((textParts.length - 1) * 15) - 6;
-      appendQuadrantLabel(xVal, yVal, textParts, 'start');
+      getLabel(xVal, yVal, textParts, 'start');
     }
     if (quadrantLabels.IV !== undefined) {
       const textParts = (quadrantLabels.IV as string).split('\n');
       const xVal = width - 4;
       const yVal = yScale(minY) - ((textParts.length - 1) * 15) - 6;
-      appendQuadrantLabel(xVal, yVal, textParts, 'end');
+      getLabel(xVal, yVal, textParts, 'end');
     }
   }
 
