@@ -1,5 +1,5 @@
 import React from 'react'
-import PSwotPlot, {ScatterPlotDatum} from 'react-pswot-plot'
+import PSwotPlot, {Datum} from 'react-pswot-plot'
 import RawData from './data/hefei_employees.json';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ const Root = styled.div`
 `;
 
 const App = () => {
-  const data: ScatterPlotDatum[] = RawData.map(d => {
+  const data: Datum[] = RawData.map(d => {
     return {
       label: d.naics.toString(),
       x: d.rca_emp,

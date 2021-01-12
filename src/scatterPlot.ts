@@ -1,90 +1,44 @@
 import * as d3 from 'd3';
-import partition from 'lodash/partition';
-
-export interface Datum {
-  label: string;
-  x: number;
-  y: number;
-  fill?: string;
-  radius?: number;
-  tooltipContent?: string;
-  tooltipContentOnly?: boolean;
-  onClick?: () => void;
-  highlighted?: boolean;
-}
-
-interface Dimensions {
-  width: number;
-  height: number;
-}
+import {Datum, Dimensions} from './types';
 
 interface Input {
-  svg: d3.Selection<any, unknown, null, undefined>;
+  container: d3.Selection<any, unknown, null, undefined>;
   // tooltip: d3.Selection<any, unknown, null, undefined>;
   data: Datum[];
   size: Dimensions;
+  xScale: d3.ScaleLogarithmic<number, number, never>;
+  yScale: d3.ScaleLinear<number, number, never>;
   axisLabels?: {left?: string, bottom?: string};
-  axisMinMax?: {
-    minX?: number,
-    maxX?: number,
-    minY?: number,
-    maxY?: number,
+  margin: {
+    top: number,
+    right: number,
+    bottom: number,
+    left: number,
+  }
+  axisMinMax: {
+    minX: number,
+    maxX: number,
+    minY: number,
+    maxY: number,
   };
   averageLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
   labelFont?: string;
 }
 
-export default (input: Input) => {
+const createScatterPlot = (input: Input) => {
   const {
-    svg, data, size, axisLabels, axisMinMax,
-    averageLineText, quadrantLabels, labelFont,
+    container, axisLabels, size: {width, height},
+    averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
+    axisMinMax: {minX, maxX, minY, maxY},
   } = input;
 
-  const [scatterplotData, /*beeswarmData*/] = partition(data, (d) => d.x > 0);
-
-
-  const margin = {top: 30, right: 30, bottom: 60, left: 60};
-  const width = size.width - margin.left - margin.right;
-  const height = size.height - margin.bottom - margin.top;
-
-  // append the svg object to the body of the page
-  svg
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom);
-
-  const container = svg
-    .append('g')
-      .attr('transform',
-            'translate(' + margin.left + ',' + margin.top + ')');
-
-  // const allXValues = scatterplotData.map(({x}) => x);
-  const allYValues = scatterplotData.map(({y}) => y);
-
-  // const rawMaxX = axisMinMax && axisMinMax.maxX !== undefined ? axisMinMax.maxX : d3.max(allXValues);
-  const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
-  const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
-
-  const minX = 0.001;
-  const maxX = 256;
-  const minY = rawMinY ? Math.floor(rawMinY) : 0;
-  const maxY = rawMaxY ? Math.ceil(rawMaxY) : 0;
-
   // Add X axis
-  const xScale = d3.scaleLog()
-    .domain([minX, maxX])
-    .range([ 0, width ])
-    .base(2)
-    .nice()
-
   container.append('g')
     .attr('transform', 'translate(0,' + height + ')')
     .call(d3.axisBottom(xScale).ticks(10))
 
   // Add Y axis
-  const yScale = d3.scaleLinear()
-    .domain([minY, maxY])
-    .range([ height, 0]);
   container.append('g')
     .call(d3.axisLeft(yScale));
 
@@ -204,7 +158,7 @@ export default (input: Input) => {
   // Add dots
   container.append('g')
     .selectAll('dot')
-    .data(scatterplotData)
+    .data(data)
     .enter()
     .append('circle')
       .attr('cx', ({x}) => xScale(x))
@@ -232,7 +186,7 @@ export default (input: Input) => {
       // })
       .on('click', ({onClick}) => onClick ? onClick() : undefined);
 
-  const highlighted = scatterplotData.find(d => d.highlighted);
+  const highlighted = data.find(d => d.highlighted);
   if (highlighted) {
     // Add highlighted dot background
     container.append('g')
@@ -279,7 +233,7 @@ export default (input: Input) => {
 
 
   // append X axis label
-  svg
+  container
     .append('text')
     .attr('transform', `translate(${width / 2 + margin.left}, ${height + margin.bottom + (margin.top / 2)})`)
       .style('text-anchor', 'middle')
@@ -287,7 +241,7 @@ export default (input: Input) => {
       .text(axisLabels && axisLabels.bottom ? axisLabels.bottom : '');
 
   // append Y axis label
-  svg
+  container
     .append('text')
     .attr('transform', 'rotate(-90)')
       .attr('y', margin.right / 2)
@@ -296,5 +250,6 @@ export default (input: Input) => {
       .style('text-anchor', 'middle')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .text(axisLabels && axisLabels.left ? axisLabels.left : '');
+}
 
-};
+export default createScatterPlot;

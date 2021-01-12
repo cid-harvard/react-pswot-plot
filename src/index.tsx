@@ -1,8 +1,9 @@
 import { select } from 'd3';
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
-import createScatterPlot, {Datum as ScatterPlotDatum} from './scatterPlot';
+import createChart from './createChart';
 import debounce from 'lodash/debounce';
+import {Datum} from './types';
 
 const Root = styled.div`
   width: 100%;
@@ -22,7 +23,7 @@ const SizingElm = styled.div`
 
 interface Props {
   id: string;
-  data: ScatterPlotDatum[];
+  data: Datum[];
   axisLabels?: {left?: string, bottom?: string};
   axisMinMax?: {
     minX?: number,
@@ -61,8 +62,8 @@ export const PSwotPlot = (props: Props) => {
       const sizingNode = sizingNodeRef.current;
       svgNode = svgNodeRef.current;
       const svg = select(svgNode);
-      createScatterPlot({
-        svg, data, size: {
+      createChart({
+        svg, data: [...data], size: {
           width: sizingNode.clientWidth, height: sizingNode.clientHeight,
         },
         axisLabels,
@@ -87,6 +88,6 @@ export const PSwotPlot = (props: Props) => {
   );
 };
 
-export {ScatterPlotDatum};
+export {Datum};
 
 export default PSwotPlot;
