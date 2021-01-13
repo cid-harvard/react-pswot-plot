@@ -20,6 +20,7 @@ interface Input {
   }
   axisLabelColor: string | undefined;
   quadrantLabelColor: string | undefined;
+  quadrantBackgroundColors?: {V?: string};
 }
 
 interface ForceDatum extends Datum {
@@ -30,10 +31,21 @@ interface ForceDatum extends Datum {
 const createBeeswarm = (input: Input) => {
   const {
     container, size: {width, height}, yScale, label, labelFont, maxY, zeroAxisLabel,
-    margin, axisLabelColor, quadrantLabelColor,
+    margin, axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
   } = input;
 
   const data: ForceDatum[] = input.data.map(d => ({...d, orginalX: d.x, orginalY: d.y}));
+
+  if (quadrantBackgroundColors) {
+    // Add background colors
+     container
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", yScale(0))
+        .attr("fill",  quadrantBackgroundColors.V ? quadrantBackgroundColors.V : '#fff')
+  }
 
 
   const makeGridlinesY: any = () => d3.axisLeft(yScale).ticks(10);

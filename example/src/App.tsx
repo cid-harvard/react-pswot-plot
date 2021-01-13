@@ -27,8 +27,15 @@ const App = () => {
           I: 'Strength',
           II: 'Opportunity',
           III: 'Threat',
-          IV: 'Weak',
+          IV: 'Weakness',
           V: 'Potential',
+        }}
+        quadrantBackgroundColors={{
+          I: '#dadbdd',
+          II: '#e6e7e8',
+          III: '#f2f3f3',
+          IV: '#fafafb',
+          V: '#edf6f4',
         }}
         zeroAxisLabel={'Relative Advantage = 0'}
         axisLabels={{
@@ -39,7 +46,7 @@ const App = () => {
           bottomRight: 'High Relative Advantage',
         }}
         axisLabelColor={'#333'}
-        quadrantLabelColor={'#f8966f'}
+        quadrantLabelColor={'#f69c7c'}
       />
     </Root>
   )

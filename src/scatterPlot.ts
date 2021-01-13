@@ -23,6 +23,7 @@ interface Input {
   };
   averageLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
+  quadrantBackgroundColors?: {I?: string, II?: string, III?: string, IV?: string};
   labelFont?: string;
   axisLabelColor: string | undefined;
   quadrantLabelColor: string | undefined;
@@ -33,7 +34,40 @@ const createScatterPlot = (input: Input) => {
     container, size: {width, height},
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor, quadrantLabelColor,
+    quadrantBackgroundColors,
   } = input;
+
+  if (quadrantBackgroundColors) {
+    // Add background colors
+     container
+        .append("rect")
+        .attr("x", xScale(1))
+        .attr("y", 0)
+        .attr("width", xScale(maxX) - xScale(1))
+        .attr("height", yScale(0))
+        .attr("fill",  quadrantBackgroundColors.I ? quadrantBackgroundColors.I : '#fff')
+     container
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", xScale(1))
+        .attr("height", yScale(0))
+        .attr("fill",  quadrantBackgroundColors.II ? quadrantBackgroundColors.II : '#fff')
+     container
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", yScale(0))
+        .attr("width", xScale(1))
+        .attr("height", yScale(minY) - yScale(0))
+        .attr("fill",  quadrantBackgroundColors.III ? quadrantBackgroundColors.III : '#fff')
+     container
+        .append("rect")
+        .attr("x", xScale(1))
+        .attr("y", yScale(0))
+        .attr("width", xScale(maxX) - xScale(1))
+        .attr("height", yScale(minY) - yScale(0))
+        .attr("fill",  quadrantBackgroundColors.IV ? quadrantBackgroundColors.IV : '#fff')
+  }
 
   // Add X axis
   const xAxis = container.append('g')
@@ -51,12 +85,6 @@ const createScatterPlot = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', '0.75')
       .style('font-size', 'clamp(7px, 1.25vw, 12px)')
-
-
-
-  // Add Y axis
-  // container.append('g')
-  //   .call(d3.axisLeft(yScale));
 
   // gridlines in x axis function
   const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(10);

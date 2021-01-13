@@ -24,6 +24,7 @@ interface Input {
   };
   averageLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
+  quadrantBackgroundColors?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   labelFont?: string;
   zeroAxisLabel?: string;
   axisLabelColor?: string;
@@ -35,6 +36,7 @@ export default (input: Input) => {
     svg, data, size, axisLabels, axisMinMax,
     averageLineText, quadrantLabels, labelFont,
     zeroAxisLabel, axisLabelColor, quadrantLabelColor,
+    quadrantBackgroundColors,
   } = input;
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
@@ -173,7 +175,6 @@ export default (input: Input) => {
   const leftAxisLabelNode = d3.select('.' + leftAxisClassName).node()
   if (leftAxisLabelNode) {
     const bbox = (leftAxisLabelNode as any).getBoundingClientRect();
-    console.log(bbox)
     const start = bbox.y - arrowPadding - 5;
     const end = bbox.y + bbox.height + arrowPadding + 5;
     svg.append('line')
@@ -198,6 +199,7 @@ export default (input: Input) => {
     zeroAxisLabel,
     margin, axisLabelColor,
     quadrantLabelColor,
+    quadrantBackgroundColors,
   });
 
   createScatterPlot({
@@ -209,6 +211,7 @@ export default (input: Input) => {
     xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor,
     quadrantLabelColor,
+    quadrantBackgroundColors,
   });
 
 

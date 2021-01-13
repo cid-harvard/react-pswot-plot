@@ -42,12 +42,13 @@ interface Props {
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   axisLabelColor?: string;
   quadrantLabelColor?: string;
+  quadrantBackgroundColors?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
 }
 
 export const PSwotPlot = (props: Props) => {
   const {
     id, data, axisLabels, axisMinMax, averageLineText, quadrantLabels,
-    zeroAxisLabel, axisLabelColor, quadrantLabelColor,
+    zeroAxisLabel, axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
   } = props;
 
   const sizingNodeRef = useRef<HTMLDivElement | null>(null);
@@ -83,6 +84,7 @@ export const PSwotPlot = (props: Props) => {
         zeroAxisLabel,
         axisLabelColor,
         quadrantLabelColor,
+        quadrantBackgroundColors,
       });
     }
     return () => {
