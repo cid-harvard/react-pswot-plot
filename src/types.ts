@@ -5,6 +5,7 @@ export interface Datum {
   fill?: string;
   radius?: number;
   onClick?: () => void;
+  highlighted?: boolean;
 }
 
 export interface Dimensions {

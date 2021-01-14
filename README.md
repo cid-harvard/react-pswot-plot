@@ -87,6 +87,7 @@ The Datum type is an interface of the following values:
 - **fill** *(optional)*: `string`
 - **radius** *(optional)*: `number`
 - **onClick** *(optional)*: `() => void`
+- **highlighted** *(optional)*: `boolean`
 
 
 ## License
