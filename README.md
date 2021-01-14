@@ -45,35 +45,33 @@ The PSwotPlot component takes the following props:
 
 - **id**: `string`
 - **data**: [`Datum[]`](#datum)
-- **axisLabels** *(optional)*: {
-  - **left** *(optional)*: `string`\
-  - **leftUp** *(optional)*: `string`\
-  - **leftDown** *(optional)*: `string`\
-  - **bottomLeft** *(optional)*: `string`\
-  - **bottomRight** *(optional)*: `string`\
-  }
-- **axisMinMax** *(optional)*: {
-  - **minX** *(optional)*: `number`\
-  - **maxX** *(optional)*: `number`\
-  - **minY** *(optional)*: `number`\
-  - **maxY** *(optional)*: `number`\
-  }
+- **axisLabels** *(optional)*:
+  - **left** *(optional)*: `string`
+  - **leftUp** *(optional)*: `string`
+  - **leftDown** *(optional)*: `string`
+  - **bottomLeft** *(optional)*: `string`
+  - **bottomRight** *(optional)*: `string`
+- **axisMinMax** *(optional)*:
+  - **minX** *(optional)*: `number`
+  - **maxX** *(optional)*: `number`
+  - **minY** *(optional)*: `number`
+  - **maxY** *(optional)*: `number`
 - **averageLineText** *(optional)*: `string`
 - **zeroAxisLabel** *(optional)*: `string`
 - **quadrantLabels** *(optional)*:
-  - **I** *(optional)*: `string`\
-  - **II** *(optional)*: `string`\
-  - **III** *(optional)*: `string`\
-  - **IV** *(optional)*: `string`\
-  - **V** *(optional)*: `string`\
+  - **I** *(optional)*: `string`
+  - **II** *(optional)*: `string`
+  - **III** *(optional)*: `string`
+  - **IV** *(optional)*: `string`
+  - **V** *(optional)*: `string`
 - **axisLabelColor** *(optional)*: `string`
 - **quadrantLabelColor** *(optional)*: `string`
 - **quadrantBackgroundColors** *(optional)*:
-  - **I** *(optional)*: `string`\
-  - **II** *(optional)*: `string`\
-  - **III** *(optional)*: `string`\
-  - **IV** *(optional)*: `string`\
-  - **V** *(optional)*: `string`\
+  - **I** *(optional)*: `string`
+  - **II** *(optional)*: `string`
+  - **III** *(optional)*: `string`
+  - **IV** *(optional)*: `string`
+  - **V** *(optional)*: `string`
 
 <a name="datum"/>
 
