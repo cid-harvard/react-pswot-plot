@@ -74,6 +74,8 @@ The PSwotPlot component takes the following props:
   - **III** *(optional)*: `string`
   - **IV** *(optional)*: `string`
   - **V** *(optional)*: `string`
+- **onQuadrantLabelMouseMove** *(optional)*: `(quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void`
+- **onQuadrantLabelMouseLeave** *(optional)*: `(quadrant: {id: string, label: string}) => void`
 
 <a name="datum"/>
 

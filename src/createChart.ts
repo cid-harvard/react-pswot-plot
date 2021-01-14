@@ -32,6 +32,8 @@ interface Input {
   zeroAxisLabel?: string;
   axisLabelColor?: string;
   quadrantLabelColor?: string;
+  onQuadrantLabelMouseMove?: (quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void;
+  onQuadrantLabelMouseLeave?: (quadrant: {id: string, label: string}) => void;
 }
 
 export default (input: Input) => {
@@ -40,6 +42,7 @@ export default (input: Input) => {
     averageLineText, quadrantLabels, labelFont,
     zeroAxisLabel, axisLabelColor, quadrantLabelColor,
     quadrantBackgroundColors,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
   } = input;
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
@@ -204,6 +207,7 @@ export default (input: Input) => {
     margin, axisLabelColor,
     quadrantLabelColor,
     quadrantBackgroundColors,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
   });
 
   createScatterPlot({
@@ -216,6 +220,7 @@ export default (input: Input) => {
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor,
     quadrantLabelColor,
     quadrantBackgroundColors,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
   });
 
 

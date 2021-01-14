@@ -12,8 +12,7 @@ const Root = styled.div`
 const App = () => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-
-  const setHovered = (datum: Datum, coords: {x: number, y: number}) => {
+  const setHovered = (datum: {label: string, fill?: string}, coords: {x: number, y: number}) => {
     const node = tooltipRef.current;
     if (node) {
       node.innerHTML = getStandardTooltip({
@@ -42,6 +41,8 @@ const App = () => {
       label: d.naics.toString(),
       x: d.rca_emp,
       y: d.density_emp,
+      // highlighted: !Math.round(Math.random()),
+      // faded: !Math.round(Math.random()),
       onMouseMove: setHovered,
       onMouseLeave: removeHovered,
     }
@@ -77,6 +78,8 @@ const App = () => {
         }}
         axisLabelColor={'#333'}
         quadrantLabelColor={'#f69c7c'}
+        onQuadrantLabelMouseMove={setHovered}
+        onQuadrantLabelMouseLeave={removeHovered}
       />
       <RapidTooltipRoot ref={tooltipRef} />
     </Root>

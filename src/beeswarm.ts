@@ -24,6 +24,8 @@ interface Input {
   axisLabelColor: string | undefined;
   quadrantLabelColor: string | undefined;
   quadrantBackgroundColors?: {V?: string};
+  onQuadrantLabelMouseMove: undefined | ((quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void);
+  onQuadrantLabelMouseLeave: undefined | ((quadrant: {id: string, label: string}) => void);
 }
 
 interface ForceDatum extends Datum {
@@ -35,6 +37,7 @@ const createBeeswarm = (input: Input) => {
   const {
     container, size: {width, height}, yScale, label, labelFont, maxY, zeroAxisLabel,
     margin, axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
   } = input;
 
   const data: ForceDatum[] = input.data.map(d => ({...d, orginalX: d.x, orginalY: d.y}));
@@ -102,15 +105,71 @@ const createBeeswarm = (input: Input) => {
       .attr('r', ({radius}) => radius ? radius : 4)
       .style("fill", "#69b3a2")
       .attr("cx", d => d.x)
-      .attr("cy", d => yScale(d.orginalY));
+      .attr("cy", d => yScale(d.orginalY))
+      .style('opacity', ({faded}) => faded ? 0.25 : 1)
+      .on('mousemove', d => {
+          if (d.onMouseMove) {
+            d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+          }
+        })
+      .on('mouseout', d => {
+        if (d.onMouseLeave) {
+          d.onMouseLeave(d)
+        }
+      })
+      .on('click', d => d.onClick ? d.onClick(d) : undefined);
+
+  const highlighted = data.find(d => d.highlighted);
+    if (highlighted) {
+      // Add highlighted dot background
+      container.append('g')
+        .selectAll('dot')
+        .data([highlighted])
+        .enter()
+        .append('circle')
+          .attr("cx", d => d.x)
+          .attr("cy", d => yScale(d.orginalY))
+          .attr('r', ({radius}) => radius ? radius * 4 : 16)
+          .style('fill', ({fill}) => fill ? fill : '#69b3a2')
+          .style('opacity', '0.4')
+          .style('pointer-events', 'none');
+      // Add highlighted dot over to top
+      container.append('g')
+        .selectAll('dot')
+        .data([highlighted])
+        .enter()
+        .append('circle')
+          .attr("cx", d => d.x)
+          .attr("cy", d => yScale(d.orginalY))
+          .attr('r', ({radius}) => radius ? radius : 4)
+          .style('fill', ({fill}) => fill ? fill : '#69b3a2')
+          .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
+          .on('mousemove', d => {
+            if (d.onMouseMove) {
+              d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+            }
+          })
+          .on('mouseout', d => {
+            if (d.onMouseLeave) {
+              d.onMouseLeave(d)
+            }
+          })
+          .on('click', d => d.onClick ? d.onClick(d) : undefined);
+    }
 
   if (label !== undefined) {
-    const getLabel = appendQuadrantLabel(container, labelFont, quadrantLabelColor);
+    const getLabel = appendQuadrantLabel(
+      container,
+      labelFont,
+      quadrantLabelColor,
+      onQuadrantLabelMouseMove,
+      onQuadrantLabelMouseLeave,
+    );
 
     const textParts = (label as string).split('\n');
     const xVal = width / 2;
     const yVal = yScale(maxY) + 20;
-    getLabel(xVal, yVal, textParts, 'middle');
+    getLabel(xVal, yVal, textParts, 'middle', 'V');
   }
 
 }

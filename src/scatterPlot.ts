@@ -27,6 +27,8 @@ interface Input {
   labelFont?: string;
   axisLabelColor: string | undefined;
   quadrantLabelColor: string | undefined;
+  onQuadrantLabelMouseMove: undefined | ((quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void);
+  onQuadrantLabelMouseLeave: undefined | ((quadrant: {id: string, label: string}) => void);
 }
 
 const createScatterPlot = (input: Input) => {
@@ -34,7 +36,7 @@ const createScatterPlot = (input: Input) => {
     container, size: {width, height},
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor, quadrantLabelColor,
-    quadrantBackgroundColors,
+    quadrantBackgroundColors, onQuadrantLabelMouseLeave, onQuadrantLabelMouseMove,
   } = input;
 
   if (quadrantBackgroundColors) {
@@ -147,30 +149,36 @@ const createScatterPlot = (input: Input) => {
   }
 
   if (quadrantLabels !== undefined) {
-    const getLabel = appendQuadrantLabel(container, labelFont, quadrantLabelColor);
+    const getLabel = appendQuadrantLabel(
+      container,
+      labelFont,
+      quadrantLabelColor,
+      onQuadrantLabelMouseMove,
+      onQuadrantLabelMouseLeave,
+    );
     if (quadrantLabels.I !== undefined) {
       const xVal = width - 4;
       const yVal = yScale(maxY) + 20;
       const textParts = (quadrantLabels.I as string).split('\n');
-      getLabel(xVal, yVal, textParts, 'end');
+      getLabel(xVal, yVal, textParts, 'end', 'I');
     }
     if (quadrantLabels.II !== undefined) {
       const xVal = xScale(minX) + 4;
       const yVal = yScale(maxY) + 20;
       const textParts = (quadrantLabels.II as string).split('\n');
-      getLabel(xVal, yVal, textParts, 'start');
+      getLabel(xVal, yVal, textParts, 'start', 'II');
     }
     if (quadrantLabels.III !== undefined) {
       const textParts = (quadrantLabels.III as string).split('\n');
       const xVal = xScale(minX) + 4;
       const yVal = yScale(minY) - ((textParts.length - 1) * 15) - 6;
-      getLabel(xVal, yVal, textParts, 'start');
+      getLabel(xVal, yVal, textParts, 'start', 'III');
     }
     if (quadrantLabels.IV !== undefined) {
       const textParts = (quadrantLabels.IV as string).split('\n');
       const xVal = width - 4;
       const yVal = yScale(minY) - ((textParts.length - 1) * 15) - 6;
-      getLabel(xVal, yVal, textParts, 'end');
+      getLabel(xVal, yVal, textParts, 'end', 'IV');
     }
   }
 
@@ -208,7 +216,7 @@ const createScatterPlot = (input: Input) => {
       .append('circle')
         .attr('cx', ({x}) => xScale(x))
         .attr('cy', ({y}) => yScale(y))
-        .attr('r', 16)
+        .attr('r', ({radius}) => radius ? radius * 4 : 16)
         .style('fill', ({fill}) => fill ? fill : '#69b3a2')
         .style('opacity', '0.4')
         .style('pointer-events', 'none');
