@@ -9,6 +9,8 @@ React component for creating a SWOT scatterplot with a beeswarm at the zero-axis
 
 [![NPM](https://img.shields.io/npm/v/react-pswot-plot.svg)](https://www.npmjs.com/package/react-pswot-plot) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+### [View live example ↗](https://cid-harvard.github.io/react-pswot-plot/)
+
 ## Install
 
 ```bash
