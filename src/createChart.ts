@@ -1,7 +1,10 @@
 import * as d3 from 'd3';
 import partition from 'lodash/partition';
 import createScatterPlot from './scatterPlot';
-import createBeeswarm from './beeswarm';
+import createBeeswarm, {
+  maxBeeswarmWidth,
+  minBeeswarmWidth,
+} from './beeswarm';
 import {Datum, Dimensions} from './types';
 
 interface Input {
@@ -46,7 +49,7 @@ export default (input: Input) => {
   const margin = {top: 30, right: 15, bottom: 60, left: 50};
   const width = size.width - margin.left - margin.right;
   const height = size.height - margin.bottom - margin.top;
-  const beeswarmWidth = Math.max(110, Math.min(width * 0.15, 180))
+  const beeswarmWidth = Math.max(minBeeswarmWidth, Math.min(width * 0.15, maxBeeswarmWidth))
   const scatterplotWidth = width - beeswarmWidth;
 
   // append the svg object to the body of the page
@@ -98,15 +101,16 @@ export default (input: Input) => {
   // append X axis label
   const bottomLeftClassName = 'pswot-plot-bottom-left-label';
   const bottomRightClassName = 'pswot-plot-bottom-right-label';
+  const bottomAxisSpacing = width * 0.015;
   scatterplot
     .append('text')
       .attr('class', bottomLeftClassName)
       .attr('y', height + (margin.top * 1.5))
-      .attr('x', xScale(1) - 18)
+      .attr('x', xScale(1) - bottomAxisSpacing)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'end')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', 'clamp(16px, 1.5vw, 18px)')
+      .style('font-size', `clamp(14px, ${width * 0.015}px, 18px)`)
       .style('font-weight', '600')
       .style('text-transform', 'uppercase')
       .text(axisLabels && axisLabels.bottomLeft ? axisLabels.bottomLeft : '');
@@ -114,11 +118,11 @@ export default (input: Input) => {
     .append('text')
       .attr('class', bottomRightClassName)
       .attr('y', height + (margin.top * 1.5))
-      .attr('x', xScale(1) + 18)
+      .attr('x', xScale(1) + bottomAxisSpacing)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'start')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', 'clamp(16px, 1.5vw, 18px)')
+      .style('font-size', `clamp(14px, ${width * 0.015}px, 18px)`)
       .style('font-weight', '600')
       .style('text-transform', 'uppercase')
       .text(axisLabels && axisLabels.bottomRight ? axisLabels.bottomRight : '');
@@ -157,19 +161,19 @@ export default (input: Input) => {
 
   leftAxisLabel.append('tspan')
       .attr('dx', arrowPadding * 3)
-      .style('font-size', 'clamp(12px, 1.5vw, 14px)')
+      .style('font-size', `clamp(10px, ${width * 0.015}px, 14px)`)
       .text(axisLabels && axisLabels.leftDown ? axisLabels.leftDown : '');
 
   leftAxisLabel.append('tspan')
       .attr('class', leftAxisClassName)
-      .style('font-size', 'clamp(16px, 1.5vw, 18px)')
+      .style('font-size', `clamp(14px, ${width * 0.015}px, 18px)`)
       .style('font-weight', '600')
       .attr('dx', arrowPadding * 4.5)
       .text(axisLabels && axisLabels.left ? axisLabels.left : '');
 
   leftAxisLabel.append('tspan')
       .attr('dx', arrowPadding * 4.5)
-      .style('font-size', 'clamp(12px, 1.5vw, 14px)')
+      .style('font-size', `clamp(10px, ${width * 0.015}px, 14px)`)
       .text(axisLabels && axisLabels.leftUp ? axisLabels.leftUp : '');
 
   const leftAxisLabelNode = d3.select('.' + leftAxisClassName).node()

@@ -84,7 +84,7 @@ const createScatterPlot = (input: Input) => {
     xAxis.selectAll('text')
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', '0.75')
-      .style('font-size', 'clamp(7px, 1.25vw, 12px)')
+      .style('font-size', `clamp(7px, ${width * 0.0175}px, 12px)`)
 
   // gridlines in x axis function
   const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(10);
@@ -139,7 +139,7 @@ const createScatterPlot = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', 'clamp(12px, 1.5vw, 16px)')
+      .style('font-size', 'clamp(12px, 1vw, 16px)')
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(averageLineText);

@@ -2,6 +2,9 @@ import * as d3 from 'd3';
 import {Datum, Dimensions} from './types';
 import {appendQuadrantLabel} from './Utils';
 
+export const maxBeeswarmWidth = 180;
+export const minBeeswarmWidth = 110;
+
 interface Input {
   container: d3.Selection<any, unknown, null, undefined>;
   data: Datum[];
@@ -74,16 +77,19 @@ const createBeeswarm = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', 'clamp(12px, 1.5vw, 16px)')
+      .style('font-size', 'clamp(12px, 1vw, 16px)')
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(zeroAxisLabel);
   }
 
+  const multiplier = 1 - ((maxBeeswarmWidth - (width + 30)) / (maxBeeswarmWidth - minBeeswarmWidth));
+  const force = 7 * (1 + multiplier);
+
   const simulation = d3.forceSimulation(data)
       .force('x', d3.forceX(width / 2).strength(1))
       .force("y", d3.forceY(d => yScale(d.y ? d.y + 0 : 0 )))
-      .force("collide", d3.forceCollide(6.5))
+      .force("collide", d3.forceCollide(force))
       .stop();
 
   for (let i = 0; i < 120; ++i) simulation.tick();
