@@ -4,8 +4,11 @@ export interface Datum {
   y: number;
   fill?: string;
   radius?: number;
-  onClick?: () => void;
+  onClick?: (datum: Datum) => void;
+  onMouseMove?: (datum: Datum, coords: {x: number, y: number}) => void;
+  onMouseLeave?: (datum: Datum) => void;
   highlighted?: boolean;
+  faded?: boolean;
 }
 
 export interface Dimensions {

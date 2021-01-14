@@ -184,26 +184,19 @@ const createScatterPlot = (input: Input) => {
       .attr('cy', ({y}) => yScale(y))
       .attr('r', ({radius}) => radius ? radius : 4)
       .style('fill', ({fill}) => fill ? fill : '#69b3a2')
+      .style('opacity', ({faded}) => faded ? 0.25 : 1)
       .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
-      // .on('mousemove', ({label, tooltipContent, tooltipContentOnly}) => {
-      //   if (tooltipContentOnly && tooltipContent && tooltipContent.length) {
-      //     tooltip.html(tooltipContent);
-      //   } else {
-      //     const content = tooltipContent === undefined || tooltipContent.length === 0
-      //       ? '' : `:<br />${tooltipContent}`;
-      //     tooltip.html(`<strong>${label}</strong>${content}`);
-
-      //   }
-      //   tooltip
-      //     .style('display', 'block')
-      //     .style('left', (d3.event.pageX + 4) + 'px')
-      //     .style('top', (d3.event.pageY - 4) + 'px');
-      //   })
-      // .on('mouseout', () => {
-      //   tooltip
-      //       .style('display', 'none');
-      // })
-      .on('click', ({onClick}) => onClick ? onClick() : undefined);
+      .on('mousemove', d => {
+          if (d.onMouseMove) {
+            d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+          }
+        })
+      .on('mouseout', d => {
+        if (d.onMouseLeave) {
+          d.onMouseLeave(d)
+        }
+      })
+      .on('click', d => d.onClick ? d.onClick(d) : undefined);
 
   const highlighted = data.find(d => d.highlighted);
   if (highlighted) {
@@ -230,24 +223,17 @@ const createScatterPlot = (input: Input) => {
         .attr('r', ({radius}) => radius ? radius : 4)
         .style('fill', ({fill}) => fill ? fill : '#69b3a2')
         .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
-        // .on('mousemove', ({label, tooltipContent, tooltipContentOnly}) => {
-        //   if (tooltipContentOnly && tooltipContent && tooltipContent.length) {
-        //     tooltip.html(tooltipContent);
-        //   } else {
-        //     const content = tooltipContent === undefined || tooltipContent.length === 0
-        //       ? '' : `:<br />${tooltipContent}`;
-        //     tooltip.html(`<strong>${label}</strong>${content}`);
-
-        //   }
-        //   tooltip
-        //     .style('display', 'block')
-        //     .style('left', (d3.event.pageX + 4) + 'px')
-        //     .style('top', (d3.event.pageY - 4) + 'px');
-        //   })
-        // .on('mouseout', () => {
-        //   tooltip
-        //       .style('display', 'none');
-        // });
+        .on('mousemove', d => {
+          if (d.onMouseMove) {
+            d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+          }
+        })
+        .on('mouseout', d => {
+          if (d.onMouseLeave) {
+            d.onMouseLeave(d)
+          }
+        })
+        .on('click', d => d.onClick ? d.onClick(d) : undefined);
   }
 }
 
