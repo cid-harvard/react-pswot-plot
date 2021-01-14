@@ -4,10 +4,7 @@ export interface Datum {
   y: number;
   fill?: string;
   radius?: number;
-  tooltipContent?: string;
-  tooltipContentOnly?: boolean;
   onClick?: () => void;
-  highlighted?: boolean;
 }
 
 export interface Dimensions {
