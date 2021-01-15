@@ -107,6 +107,7 @@ const createBeeswarm = (input: Input) => {
       .attr("cx", d => d.x)
       .attr("cy", d => yScale(d.orginalY))
       .style('opacity', ({faded}) => faded ? 0.25 : 1)
+      .on('mouseover', onMouseEnter)
       .on('mousemove', d => {
           if (d.onMouseMove) {
             d.onMouseMove(
@@ -116,11 +117,42 @@ const createBeeswarm = (input: Input) => {
           }
         })
       .on('mouseout', d => {
+        onMouseLeave();
         if (d.onMouseLeave) {
           d.onMouseLeave({...d, x: d.orginalX})
         }
       })
       .on('click', d => d.onClick ? d.onClick(d) : undefined);
+
+  const hoveredBackground = container
+    .append('circle')
+      .style('pointer-events', 'none')
+      .style('fill', 'none');
+
+  const hoveredForeground = container
+    .append('circle')
+      .style('pointer-events', 'none')
+      .style('fill', 'none');
+
+  function onMouseEnter(d: ForceDatum) {
+    hoveredBackground
+      .attr('cx', d.x)
+      .attr("cy", yScale(d.orginalY))
+      .attr('r', d.radius ? d.radius * 4 : 16)
+      .style('fill', d.fill ? d.fill : '#69b3a2')
+      .style('opacity', '0.2')
+
+    hoveredForeground
+      .attr('cx', d.x)
+      .attr("cy", yScale(d.orginalY))
+      .attr('r', d.radius ? d.radius : 4)
+      .style('fill', d.fill ? d.fill : '#69b3a2')
+  }
+
+  const onMouseLeave = () => {
+    hoveredBackground.style('fill', 'none');
+    hoveredForeground.style('fill', 'none');
+  }
 
   const highlighted = data.find(d => d.highlighted);
     if (highlighted) {

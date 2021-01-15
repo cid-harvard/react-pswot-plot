@@ -12,7 +12,7 @@ export const appendQuadrantLabel =
           .style('text-anchor', textAnchor)
           .style('opacity', 0.8)
           .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-          .style('font-size', 'clamp(12px, 1.75vw, 20px)')
+          .style('font-size', 'clamp(12px, 1.65vw, 18px)')
           .style('font-weight', '600')
           .style('text-transform', 'uppercase')
           .style('dominant-baseline', 'bottom')

@@ -194,17 +194,49 @@ const createScatterPlot = (input: Input) => {
       .style('fill', ({fill}) => fill ? fill : '#69b3a2')
       .style('opacity', ({faded}) => faded ? 0.25 : 1)
       .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
+      .on('mouseover', onMouseEnter)
       .on('mousemove', d => {
           if (d.onMouseMove) {
             d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
           }
         })
       .on('mouseout', d => {
+        onMouseLeave();
         if (d.onMouseLeave) {
           d.onMouseLeave(d)
         }
       })
       .on('click', d => d.onClick ? d.onClick(d) : undefined);
+
+  const hoveredBackground = container
+    .append('circle')
+      .style('pointer-events', 'none')
+      .style('fill', 'none');
+
+  const hoveredForeground = container
+    .append('circle')
+      .style('pointer-events', 'none')
+      .style('fill', 'none');
+
+  function onMouseEnter(d: Datum) {
+    hoveredBackground
+      .attr('cx', xScale(d.x))
+      .attr('cy', yScale(d.y))
+      .attr('r', d.radius ? d.radius * 4 : 16)
+      .style('fill', d.fill ? d.fill : '#69b3a2')
+      .style('opacity', '0.2')
+
+    hoveredForeground
+      .attr('cx', xScale(d.x))
+      .attr('cy', yScale(d.y))
+      .attr('r', d.radius ? d.radius : 4)
+      .style('fill', d.fill ? d.fill : '#69b3a2')
+  }
+
+  const onMouseLeave = () => {
+    hoveredBackground.style('fill', 'none');
+    hoveredForeground.style('fill', 'none');
+  }
 
   const highlighted = data.find(d => d.highlighted);
   if (highlighted) {
@@ -218,7 +250,7 @@ const createScatterPlot = (input: Input) => {
         .attr('cy', ({y}) => yScale(y))
         .attr('r', ({radius}) => radius ? radius * 4 : 16)
         .style('fill', ({fill}) => fill ? fill : '#69b3a2')
-        .style('opacity', '0.4')
+        .style('opacity', '0.2')
         .style('pointer-events', 'none');
     // Add highlighted dot over to top
     container.append('g')
