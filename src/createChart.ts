@@ -181,14 +181,13 @@ export default (input: Input) => {
 
   const leftAxisLabelNode = d3.select('.' + leftAxisClassName).node()
   if (leftAxisLabelNode) {
-    const bbox = (leftAxisLabelNode as any).getBoundingClientRect();
-    const start = bbox.y - arrowPadding - 5;
-    const end = bbox.y + bbox.height + arrowPadding + 5;
+    const bbox = (leftAxisLabelNode as any).getBBox();
     svg.append('line')
-      .attr('x1',bbox.x + arrowPadding + 2)
-      .attr('x2',bbox.x + arrowPadding + 2)
-      .attr('y1',start)
-      .attr('y2',end)
+      .attr('x1',bbox.x - arrowPadding)
+      .attr('x2',bbox.x + bbox.width + arrowPadding)
+      .attr('y1',bbox.y + arrowPadding)
+      .attr('y2',bbox.y + arrowPadding)
+      .attr('transform', 'rotate(-90)')
       .attr('stroke-width', '10px')
       .attr('stroke', 'none')
       .style('pointer-events', 'none')
@@ -199,7 +198,7 @@ export default (input: Input) => {
   createBeeswarm({
     container: beeswarm,
     data: [...filteredBeeswarmData],
-    size: {width: beeswarmWidth - (margin.right * 2), height},
+    size: {width: beeswarmWidth - margin.right, height},
     xScale, yScale,
     label: quadrantLabels ? quadrantLabels.V : undefined,
     labelFont, maxY,

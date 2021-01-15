@@ -25,6 +25,58 @@ export const RapidTooltipRoot = styled.div`
   pointer-events: none;
   transform: translate(-50%, calc(-100% - 1.5rem));
   display: none;
+  
+  .rapid-tooltip-title {
+    padding: 0.5rem;
+  }
+
+  .rapid-tooltip-subsection-grid {
+    display: grid;
+    grid-gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .rapid-tooltip-cell {
+    display: flex;
+  }
+
+  .rapid-tooltip-arrow-container {
+    width: 100%;
+    height: 0.5rem;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    transform: translate(0, 100%);
+  }
+
+  .rapid-tooltip-arrow {
+    width: 0.5rem;
+    height: 0.5rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    left: -0.25rem;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 9px solid #dfdfdf;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 1px;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #fff;
+    }
+  }
 `;
 
 export const getStandardTooltip = (input: Input) => {

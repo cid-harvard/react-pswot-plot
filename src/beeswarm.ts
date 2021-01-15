@@ -103,18 +103,21 @@ const createBeeswarm = (input: Input) => {
     .enter()
     .append('circle')
       .attr('r', ({radius}) => radius ? radius : 4)
-      .style("fill", "#69b3a2")
+      .style('fill', ({fill}) => fill ? fill : '#69b3a2')
       .attr("cx", d => d.x)
       .attr("cy", d => yScale(d.orginalY))
       .style('opacity', ({faded}) => faded ? 0.25 : 1)
       .on('mousemove', d => {
           if (d.onMouseMove) {
-            d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+            d.onMouseMove(
+              {...d, x: d.orginalX},
+              {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY}
+            )
           }
         })
       .on('mouseout', d => {
         if (d.onMouseLeave) {
-          d.onMouseLeave(d)
+          d.onMouseLeave({...d, x: d.orginalX})
         }
       })
       .on('click', d => d.onClick ? d.onClick(d) : undefined);
