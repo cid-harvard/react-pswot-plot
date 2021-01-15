@@ -83,6 +83,7 @@ The PSwotPlot component takes the following props:
 
 The Datum type is an interface of the following values:
 
+- **id**: `string`
 - **label**: `string`
 - **x**: `number`
 - **y**: `number`

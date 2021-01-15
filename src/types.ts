@@ -1,4 +1,5 @@
 export interface Datum {
+  id: string;
   label: string;
   x: number;
   y: number;
