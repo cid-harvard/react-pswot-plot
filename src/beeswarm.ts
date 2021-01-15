@@ -111,7 +111,7 @@ const createBeeswarm = (input: Input) => {
       .on('mousemove', d => {
           if (d.onMouseMove) {
             d.onMouseMove(
-              {...d, x: d.orginalX},
+              {...d, x: d.orginalX, y: d.orginalY},
               {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY}
             )
           }
@@ -181,7 +181,10 @@ const createBeeswarm = (input: Input) => {
           .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
           .on('mousemove', d => {
             if (d.onMouseMove) {
-              d.onMouseMove(d, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+              d.onMouseMove(
+                {...d, x: d.orginalX, y: d.orginalY},
+                {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY}
+              )
             }
           })
           .on('mouseout', d => {
