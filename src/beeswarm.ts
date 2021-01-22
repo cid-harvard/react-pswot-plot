@@ -104,6 +104,8 @@ const createBeeswarm = (input: Input) => {
     .append('circle')
       .attr('r', ({radius}) => radius ? radius : 4)
       .style('fill', ({fill}) => fill ? fill : '#69b3a2')
+      .style('stroke', ({stroke}) => stroke ? stroke : '#333')
+      .style('stroke-width', '0.5px')
       .attr("cx", d => d.x)
       .attr("cy", d => yScale(d.orginalY))
       .style('opacity', ({faded}) => faded ? 0.25 : 1)
@@ -132,7 +134,7 @@ const createBeeswarm = (input: Input) => {
   const hoveredForeground = container
     .append('circle')
       .style('pointer-events', 'none')
-      .style('fill', 'none');
+      .style('fill', 'none')
 
   function onMouseEnter(d: ForceDatum) {
     hoveredBackground
@@ -147,11 +149,15 @@ const createBeeswarm = (input: Input) => {
       .attr("cy", yScale(d.orginalY))
       .attr('r', d.radius ? d.radius : 4)
       .style('fill', d.fill ? d.fill : '#69b3a2')
+      .style('stroke', d.stroke ? d.stroke : '#333')
+      .style('stroke-width', '0.5px')
   }
 
   const onMouseLeave = () => {
     hoveredBackground.style('fill', 'none');
-    hoveredForeground.style('fill', 'none');
+    hoveredForeground
+      .style('fill', 'none')
+      .style('stroke', 'none')
   }
 
   const highlighted = data.find(d => d.highlighted);
@@ -178,6 +184,8 @@ const createBeeswarm = (input: Input) => {
           .attr("cy", d => yScale(d.orginalY))
           .attr('r', ({radius}) => radius ? radius : 4)
           .style('fill', ({fill}) => fill ? fill : '#69b3a2')
+          .style('stroke', ({stroke}) => stroke ? stroke : '#333')
+          .style('stroke-width', '0.5px')
           .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
           .on('mousemove', d => {
             if (d.onMouseMove) {

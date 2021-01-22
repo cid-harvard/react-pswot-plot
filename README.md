@@ -88,6 +88,7 @@ The Datum type is an interface of the following values:
 - **x**: `number`
 - **y**: `number`
 - **fill** *(optional)*: `string`
+- **stroke** *(optional)*: `string`
 - **radius** *(optional)*: `number`
 - **onClick** *(optional)*: `(datum: Datum) => void`
 - **onMouseMove** *(optional)*: `(datum: Datum, coords: {x: number, y: number}) => void`

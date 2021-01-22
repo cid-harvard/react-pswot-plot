@@ -192,7 +192,9 @@ const createScatterPlot = (input: Input) => {
       .attr('cy', ({y}) => yScale(y))
       .attr('r', ({radius}) => radius ? radius : 4)
       .style('fill', ({fill}) => fill ? fill : '#69b3a2')
-      .style('opacity', ({faded}) => faded ? 0.25 : 1)
+      .style('stroke', ({stroke}) => stroke ? stroke : '#333')
+      .style('stroke-width', '0.5px')
+      .style('opacity', ({faded}) => faded ? 0.1 : 1)
       .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
       .on('mouseover', onMouseEnter)
       .on('mousemove', d => {
@@ -231,11 +233,15 @@ const createScatterPlot = (input: Input) => {
       .attr('cy', yScale(d.y))
       .attr('r', d.radius ? d.radius : 4)
       .style('fill', d.fill ? d.fill : '#69b3a2')
+      .style('stroke', d.stroke ? d.stroke : '#333')
+      .style('stroke-width', '0.5px')
   }
 
   const onMouseLeave = () => {
     hoveredBackground.style('fill', 'none');
-    hoveredForeground.style('fill', 'none');
+    hoveredForeground
+      .style('fill', 'none')
+      .style('stroke', 'none')
   }
 
   const highlighted = data.find(d => d.highlighted);
@@ -262,6 +268,8 @@ const createScatterPlot = (input: Input) => {
         .attr('cy', ({y}) => yScale(y))
         .attr('r', ({radius}) => radius ? radius : 4)
         .style('fill', ({fill}) => fill ? fill : '#69b3a2')
+        .style('stroke', ({stroke}) => stroke ? stroke : '#333')
+        .style('stroke-width', '0.5px')
         .style('cursor', ({onClick}) => onClick ? 'pointer' : 'default')
         .on('mousemove', d => {
           if (d.onMouseMove) {

@@ -4,6 +4,7 @@ export interface Datum {
   x: number;
   y: number;
   fill?: string;
+  stroke?: string;
   radius?: number;
   onClick?: (datum: Datum) => void;
   onMouseMove?: (datum: Datum, coords: {x: number, y: number}) => void;
