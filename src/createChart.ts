@@ -88,8 +88,8 @@ export default (input: Input) => {
 
   const minX = 0.001;
   const maxX = 256;
-  const minY = rawMinY ? Math.floor(rawMinY) : 0;
-  const maxY = rawMaxY ? Math.ceil(rawMaxY) : 0;
+  const minY = rawMinY ? Math.floor(rawMinY) : -1;
+  const maxY = rawMaxY ? Math.ceil(rawMaxY) : 1;
 
   const xScale = d3.scaleLog()
     .domain([minX, maxX])
