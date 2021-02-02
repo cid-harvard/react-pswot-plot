@@ -81,7 +81,7 @@ export default (input: Input) => {
       .attr('transform',
             'translate(' + (margin.left) + ',' + margin.top + ')');
 
-  const allYValues = scatterplotData.map(({y}) => y);
+  const allYValues = [...scatterplotData, ...filteredBeeswarmData].map(({y}) => y);
 
   const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
