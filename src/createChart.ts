@@ -7,6 +7,8 @@ import createBeeswarm, {
 } from './beeswarm';
 import {Datum, Dimensions} from './types';
 
+const minExpectedScreenSize = 820;
+
 interface Input {
   svg: d3.Selection<any, unknown, null, undefined>;
   // tooltip: d3.Selection<any, unknown, null, undefined>;
@@ -52,8 +54,11 @@ export default (input: Input) => {
   const margin = {top: 30, right: 15, bottom: 60, left: 50};
   const width = size.width - margin.left - margin.right;
   const height = size.height - margin.bottom - margin.top;
-  const beeswarmWidth = Math.max(minBeeswarmWidth, Math.min(width * 0.15, maxBeeswarmWidth))
+  const beeswarmWidth = Math.max(minBeeswarmWidth, Math.min(width * 0.19, maxBeeswarmWidth))
   const scatterplotWidth = width - beeswarmWidth;
+
+  const smallerSize = width < height ? width : height;
+  const radiusAdjuster = (radius: number) => (smallerSize / minExpectedScreenSize) * radius;
 
   // append the svg object to the body of the page
   svg
@@ -104,7 +109,11 @@ export default (input: Input) => {
   // append X axis label
   const bottomLeftClassName = 'pswot-plot-bottom-left-label';
   const bottomRightClassName = 'pswot-plot-bottom-right-label';
-  const bottomAxisSpacing = width * 0.015;
+  const bottomAxisSpacing = width > 600 ? width * 0.015 : width * 0.00875;
+  const axistFontSize = `clamp(10px, ${width * 0.015}px, 18px)`;
+  const axisSmallTextFontSize = `clamp(10px, ${width * 0.015}px, 14px)`;
+  const arrowRight = width > 600 ? '' : ' →';
+  const arrowLeft = width > 600 ? '' : '← ';
   scatterplot
     .append('text')
       .attr('class', bottomLeftClassName)
@@ -113,10 +122,10 @@ export default (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'end')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', `clamp(14px, ${width * 0.015}px, 18px)`)
+      .style('font-size', axistFontSize)
       .style('font-weight', '600')
       .style('text-transform', 'uppercase')
-      .text(axisLabels && axisLabels.bottomLeft ? axisLabels.bottomLeft : '');
+      .text(axisLabels && axisLabels.bottomLeft ? arrowLeft + axisLabels.bottomLeft : '');
   scatterplot
     .append('text')
       .attr('class', bottomRightClassName)
@@ -125,15 +134,15 @@ export default (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'start')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', `clamp(14px, ${width * 0.015}px, 18px)`)
+      .style('font-size', axistFontSize)
       .style('font-weight', '600')
       .style('text-transform', 'uppercase')
-      .text(axisLabels && axisLabels.bottomRight ? axisLabels.bottomRight : '');
+      .text(axisLabels && axisLabels.bottomRight ? axisLabels.bottomRight + arrowRight : '');
 
-  const arrowPadding = 10;
+  const arrowPadding = width > 600 ? 10 : 2;
   const bottomLeftNode = d3.select('.' + bottomLeftClassName).node()
   const bottomRightNode = d3.select('.' + bottomRightClassName).node()
-  if (bottomLeftNode && bottomRightNode) {
+  if (bottomLeftNode && bottomRightNode && width > 600) {
     const start = (bottomLeftNode as any).getBBox().x - arrowPadding;
     const rightLabelBbox = (bottomRightNode as any).getBBox();
     const end = rightLabelBbox.x + rightLabelBbox.width  + arrowPadding;
@@ -164,23 +173,23 @@ export default (input: Input) => {
 
   leftAxisLabel.append('tspan')
       .attr('dx', arrowPadding * 3)
-      .style('font-size', `clamp(10px, ${width * 0.015}px, 14px)`)
+      .style('font-size', axisSmallTextFontSize)
       .text(axisLabels && axisLabels.leftDown ? axisLabels.leftDown : '');
 
   leftAxisLabel.append('tspan')
       .attr('class', leftAxisClassName)
-      .style('font-size', `clamp(14px, ${width * 0.015}px, 18px)`)
+      .style('font-size', axistFontSize)
       .style('font-weight', '600')
       .attr('dx', arrowPadding * 4.5)
-      .text(axisLabels && axisLabels.left ? axisLabels.left : '');
+      .text(axisLabels && axisLabels.left ? arrowLeft + axisLabels.left + arrowRight : '');
 
   leftAxisLabel.append('tspan')
       .attr('dx', arrowPadding * 4.5)
-      .style('font-size', `clamp(10px, ${width * 0.015}px, 14px)`)
+      .style('font-size', axisSmallTextFontSize)
       .text(axisLabels && axisLabels.leftUp ? axisLabels.leftUp : '');
 
   const leftAxisLabelNode = d3.select('.' + leftAxisClassName).node()
-  if (leftAxisLabelNode) {
+  if (leftAxisLabelNode && width > 600) {
     const bbox = (leftAxisLabelNode as any).getBBox();
     svg.append('line')
       .attr('x1',bbox.x - arrowPadding)
@@ -207,6 +216,8 @@ export default (input: Input) => {
     quadrantLabelColor,
     quadrantBackgroundColors,
     onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
+    chartWidth: width,
+    radiusAdjuster,
   });
 
   createScatterPlot({
@@ -220,6 +231,8 @@ export default (input: Input) => {
     quadrantLabelColor,
     quadrantBackgroundColors,
     onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
+    chartWidth: width,
+    radiusAdjuster,
   });
 
 

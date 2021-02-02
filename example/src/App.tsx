@@ -15,8 +15,8 @@ const Root = styled.div`
 `;
 
 const Container = styled.div`
-  width: 800px;
-  height: 700px;  
+  width: 100%;
+  height: 100%;  
 `;
 
 const colorMap = [

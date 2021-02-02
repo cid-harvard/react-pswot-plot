@@ -7,6 +7,7 @@ interface Input {
   // tooltip: d3.Selection<any, unknown, null, undefined>;
   data: Datum[];
   size: Dimensions;
+  chartWidth: number,
   xScale: d3.ScaleLogarithmic<number, number, never>;
   yScale: d3.ScaleLinear<number, number, never>;
   margin: {
@@ -29,6 +30,7 @@ interface Input {
   quadrantLabelColor: string | undefined;
   onQuadrantLabelMouseMove: undefined | ((quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void);
   onQuadrantLabelMouseLeave: undefined | ((quadrant: {id: string, label: string}) => void);
+  radiusAdjuster: (val: number) => number,
 }
 
 const createScatterPlot = (input: Input) => {
@@ -37,6 +39,7 @@ const createScatterPlot = (input: Input) => {
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor, quadrantLabelColor,
     quadrantBackgroundColors, onQuadrantLabelMouseLeave, onQuadrantLabelMouseMove,
+    chartWidth, radiusAdjuster,
   } = input;
 
   if (quadrantBackgroundColors) {
@@ -85,8 +88,8 @@ const createScatterPlot = (input: Input) => {
       .attr('stroke', 'none')
     xAxis.selectAll('text')
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
-      .style('opacity', '0.75')
-      .style('font-size', `clamp(7px, ${width * 0.0175}px, 12px)`)
+      .style('opacity', chartWidth < 300 ? 0 : 0.75)
+      .style('font-size', `clamp(7px, ${chartWidth * 0.0175}px, 12px)`)
 
   // gridlines in x axis function
   const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(10);
@@ -141,7 +144,7 @@ const createScatterPlot = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', 'clamp(12px, 1vw, 16px)')
+      .style('font-size', `clamp(9px, ${chartWidth * 0.0155}px, 15px)`)
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(averageLineText);
@@ -152,6 +155,7 @@ const createScatterPlot = (input: Input) => {
     const getLabel = appendQuadrantLabel(
       container,
       labelFont,
+      `clamp(8px, ${chartWidth * 0.025}px, 16px)`,
       quadrantLabelColor,
       onQuadrantLabelMouseMove,
       onQuadrantLabelMouseLeave,
@@ -190,7 +194,7 @@ const createScatterPlot = (input: Input) => {
     .append('circle')
       .attr('cx', ({x}) => xScale(x))
       .attr('cy', ({y}) => yScale(y))
-      .attr('r', ({radius}) => radius ? radius : 4)
+      .attr('r', ({radius}) => radiusAdjuster(radius ? radius : 4))
       .style('fill', ({fill}) => fill ? fill : '#69b3a2')
       .style('stroke', ({stroke}) => stroke ? stroke : '#333')
       .style('stroke-width', '0.5px')
@@ -224,14 +228,14 @@ const createScatterPlot = (input: Input) => {
     hoveredBackground
       .attr('cx', xScale(d.x))
       .attr('cy', yScale(d.y))
-      .attr('r', d.radius ? d.radius * 4 : 16)
+      .attr('r', radiusAdjuster(d.radius ? d.radius * 4 : 16))
       .style('fill', d.fill ? d.fill : '#69b3a2')
       .style('opacity', '0.2')
 
     hoveredForeground
       .attr('cx', xScale(d.x))
       .attr('cy', yScale(d.y))
-      .attr('r', d.radius ? d.radius : 4)
+      .attr('r', radiusAdjuster(d.radius ? d.radius : 4))
       .style('fill', d.fill ? d.fill : '#69b3a2')
       .style('stroke', d.stroke ? d.stroke : '#333')
       .style('stroke-width', '0.5px')
@@ -254,7 +258,7 @@ const createScatterPlot = (input: Input) => {
       .append('circle')
         .attr('cx', ({x}) => xScale(x))
         .attr('cy', ({y}) => yScale(y))
-        .attr('r', ({radius}) => radius ? radius * 4 : 16)
+        .attr('r', ({radius}) => radiusAdjuster(radius ? radius * 4 : 16))
         .style('fill', ({fill}) => fill ? fill : '#69b3a2')
         .style('opacity', '0.2')
         .style('pointer-events', 'none');
@@ -266,7 +270,7 @@ const createScatterPlot = (input: Input) => {
       .append('circle')
         .attr('cx', ({x}) => xScale(x))
         .attr('cy', ({y}) => yScale(y))
-        .attr('r', ({radius}) => radius ? radius : 4)
+        .attr('r', ({radius}) => radiusAdjuster(radius ? radius : 4))
         .style('fill', ({fill}) => fill ? fill : '#69b3a2')
         .style('stroke', ({stroke}) => stroke ? stroke : '#333')
         .style('stroke-width', '0.5px')

@@ -2,13 +2,14 @@ import * as d3 from 'd3';
 import {Datum, Dimensions} from './types';
 import {appendQuadrantLabel} from './Utils';
 
-export const maxBeeswarmWidth = 180;
+export const maxBeeswarmWidth = 170;
 export const minBeeswarmWidth = 110;
 
 interface Input {
   container: d3.Selection<any, unknown, null, undefined>;
   data: Datum[];
   size: Dimensions;
+  chartWidth: number;
   xScale: d3.ScaleLogarithmic<number, number, never>;
   yScale: d3.ScaleLinear<number, number, never>;
   label: string | undefined;
@@ -26,6 +27,7 @@ interface Input {
   quadrantBackgroundColors?: {V?: string};
   onQuadrantLabelMouseMove: undefined | ((quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void);
   onQuadrantLabelMouseLeave: undefined | ((quadrant: {id: string, label: string}) => void);
+  radiusAdjuster: (val: number) => number,
 }
 
 interface ForceDatum extends Datum {
@@ -36,8 +38,9 @@ interface ForceDatum extends Datum {
 const createBeeswarm = (input: Input) => {
   const {
     container, size: {width, height}, yScale, label, labelFont, maxY, zeroAxisLabel,
-    margin, axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
-    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
+    axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave, chartWidth,
+    radiusAdjuster,
   } = input;
 
   const data: ForceDatum[] = input.data.map(d => ({...d, orginalX: d.x, orginalY: d.y}));
@@ -75,12 +78,12 @@ const createBeeswarm = (input: Input) => {
     .style('stroke-dasharray', '3 1')
   if (zeroAxisLabel !== undefined) {
     container.append('text')
-      .attr('x', 0)
-      .attr('y', height + (margin.top * 1.5))
+      .attr('x', 4)
+      .attr('y', height - 4)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', 'clamp(12px, 1vw, 16px)')
+      .style('font-size', `clamp(9px, ${chartWidth * 0.0155}px, 15px)`)
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(zeroAxisLabel);
@@ -102,7 +105,7 @@ const createBeeswarm = (input: Input) => {
     .data(data)
     .enter()
     .append('circle')
-      .attr('r', ({radius}) => radius ? radius : 4)
+      .attr('r', ({radius}) => radiusAdjuster(radius ? radius : 4))
       .style('fill', ({fill}) => fill ? fill : '#69b3a2')
       .style('stroke', ({stroke}) => stroke ? stroke : '#333')
       .style('stroke-width', '0.5px')
@@ -140,14 +143,14 @@ const createBeeswarm = (input: Input) => {
     hoveredBackground
       .attr('cx', d.x)
       .attr("cy", yScale(d.orginalY))
-      .attr('r', d.radius ? d.radius * 4 : 16)
+      .attr('r', radiusAdjuster(d.radius ? d.radius * 4 : 16))
       .style('fill', d.fill ? d.fill : '#69b3a2')
       .style('opacity', '0.2')
 
     hoveredForeground
       .attr('cx', d.x)
       .attr("cy", yScale(d.orginalY))
-      .attr('r', d.radius ? d.radius : 4)
+      .attr('r', radiusAdjuster(d.radius ? d.radius : 4))
       .style('fill', d.fill ? d.fill : '#69b3a2')
       .style('stroke', d.stroke ? d.stroke : '#333')
       .style('stroke-width', '0.5px')
@@ -170,7 +173,7 @@ const createBeeswarm = (input: Input) => {
         .append('circle')
           .attr("cx", d => d.x)
           .attr("cy", d => yScale(d.orginalY))
-          .attr('r', ({radius}) => radius ? radius * 4 : 16)
+          .attr('r', ({radius}) => radiusAdjuster(radius ? radius * 4 : 16))
           .style('fill', ({fill}) => fill ? fill : '#69b3a2')
           .style('opacity', '0.4')
           .style('pointer-events', 'none');
@@ -182,7 +185,7 @@ const createBeeswarm = (input: Input) => {
         .append('circle')
           .attr("cx", d => d.x)
           .attr("cy", d => yScale(d.orginalY))
-          .attr('r', ({radius}) => radius ? radius : 4)
+          .attr('r', ({radius}) => radiusAdjuster(radius ? radius : 4))
           .style('fill', ({fill}) => fill ? fill : '#69b3a2')
           .style('stroke', ({stroke}) => stroke ? stroke : '#333')
           .style('stroke-width', '0.5px')
@@ -207,6 +210,7 @@ const createBeeswarm = (input: Input) => {
     const getLabel = appendQuadrantLabel(
       container,
       labelFont,
+      `clamp(8px, ${chartWidth * 0.025}px, 16px)`,
       quadrantLabelColor,
       onQuadrantLabelMouseMove,
       onQuadrantLabelMouseLeave,

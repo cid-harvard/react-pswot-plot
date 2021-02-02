@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 export const appendQuadrantLabel =
   (container: d3.Selection<any, unknown, null, undefined>,
    labelFont: string | undefined,
+   fontSize: string,
    color: string | undefined,
    onMouseMove: undefined | ((quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void),
    onMouseLeave: undefined | ((quadrant: {id: string, label: string}) => void),
@@ -12,7 +13,7 @@ export const appendQuadrantLabel =
           .style('text-anchor', textAnchor)
           .style('opacity', 0.8)
           .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-          .style('font-size', 'clamp(12px, 1.65vw, 18px)')
+          .style('font-size', fontSize)
           .style('font-weight', '600')
           .style('text-transform', 'uppercase')
           .style('dominant-baseline', 'bottom')
