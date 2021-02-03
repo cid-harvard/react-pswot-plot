@@ -110,15 +110,15 @@ export default (input: Input) => {
   const bottomLeftClassName = 'pswot-plot-bottom-left-label';
   const bottomRightClassName = 'pswot-plot-bottom-right-label';
   const bottomAxisSpacing = width > 600 ? width * 0.015 : width * 0.00875;
-  const axistFontSize = `clamp(10px, ${width * 0.015}px, 18px)`;
-  const axisSmallTextFontSize = `clamp(10px, ${width * 0.015}px, 14px)`;
+  const axistFontSize = `clamp(10px, ${width * 0.02}px, 18px)`;
+  const axisSmallTextFontSize = `clamp(10px, ${width * 0.02}px, 14px)`;
   const arrowRight = width > 600 ? '' : ' →';
   const arrowLeft = width > 600 ? '' : '← ';
   scatterplot
     .append('text')
       .attr('class', bottomLeftClassName)
       .attr('y', height + (margin.top * 1.5))
-      .attr('x', xScale(1) - bottomAxisSpacing)
+      .attr('x', width > 400 ? xScale(1) - bottomAxisSpacing : 0)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('text-anchor', 'end')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
@@ -130,9 +130,9 @@ export default (input: Input) => {
     .append('text')
       .attr('class', bottomRightClassName)
       .attr('y', height + (margin.top * 1.5))
-      .attr('x', xScale(1) + bottomAxisSpacing)
+      .attr('x', width > 400 ? xScale(1) + bottomAxisSpacing : width - margin.left * 2.25)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
-      .style('text-anchor', 'start')
+      .style('text-anchor', width > 400 ? 'start' : 'end')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('font-size', axistFontSize)
       .style('font-weight', '600')
