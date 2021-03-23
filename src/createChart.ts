@@ -110,10 +110,10 @@ export default (input: Input) => {
   const bottomLeftClassName = 'pswot-plot-bottom-left-label';
   const bottomRightClassName = 'pswot-plot-bottom-right-label';
   const bottomAxisSpacing = width > 600 ? width * 0.015 : width * 0.00875;
-  const axistFontSize = `clamp(10px, ${width * 0.02}px, 18px)`;
-  const axisSmallTextFontSize = `clamp(10px, ${width * 0.02}px, 14px)`;
-  const arrowRight = width > 600 ? '' : ' →';
-  const arrowLeft = width > 600 ? '' : '← ';
+  const axistFontSize = `clamp(0.75rem, ${width * 0.015}px, 1rem)`;
+  const axisSmallTextFontSize = `clamp(0.75rem, ${width * 0.015}px, 0.875rem)`;
+  const arrowRight = ' →';
+  const arrowLeft = '← ';
   scatterplot
     .append('text')
       .attr('class', bottomLeftClassName)
@@ -139,24 +139,7 @@ export default (input: Input) => {
       .style('text-transform', 'uppercase')
       .text(axisLabels && axisLabels.bottomRight ? axisLabels.bottomRight + arrowRight : '');
 
-  const arrowPadding = width > 600 ? 10 : 2;
-  const bottomLeftNode = d3.select('.' + bottomLeftClassName).node()
-  const bottomRightNode = d3.select('.' + bottomRightClassName).node()
-  if (bottomLeftNode && bottomRightNode && width > 600) {
-    const start = (bottomLeftNode as any).getBBox().x - arrowPadding;
-    const rightLabelBbox = (bottomRightNode as any).getBBox();
-    const end = rightLabelBbox.x + rightLabelBbox.width  + arrowPadding;
-    scatterplot.append('line')
-      .attr('x1',start)
-      .attr('x2',end)
-      .attr('y1',height + (margin.top * 1.3))
-      .attr('y2',height + (margin.top * 1.3))
-      .attr('stroke-width', '10px')
-      .attr('stroke', 'none')
-      .style('pointer-events', 'none')
-      .attr("marker-end", "url(#arrowhead)")
-      .attr("marker-start", "url(#arrowhead)");
-  }
+  const arrowPadding = width > 600 ? 5 : 1;
 
   // append Y axis label
   const leftAxisClassName = 'pswot-plot-left-axis-label';
@@ -187,22 +170,6 @@ export default (input: Input) => {
       .attr('dx', arrowPadding * 4.5)
       .style('font-size', axisSmallTextFontSize)
       .text(axisLabels && axisLabels.leftUp ? axisLabels.leftUp : '');
-
-  const leftAxisLabelNode = d3.select('.' + leftAxisClassName).node()
-  if (leftAxisLabelNode && width > 600) {
-    const bbox = (leftAxisLabelNode as any).getBBox();
-    svg.append('line')
-      .attr('x1',bbox.x - arrowPadding)
-      .attr('x2',bbox.x + bbox.width + arrowPadding)
-      .attr('y1',bbox.y + arrowPadding)
-      .attr('y2',bbox.y + arrowPadding)
-      .attr('transform', 'rotate(-90)')
-      .attr('stroke-width', '10px')
-      .attr('stroke', 'none')
-      .style('pointer-events', 'none')
-      .attr("marker-end", "url(#arrowhead)")
-      .attr("marker-start", "url(#arrowhead)")
-  }
 
   createBeeswarm({
     container: beeswarm,
