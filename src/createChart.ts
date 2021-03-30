@@ -84,21 +84,47 @@ export default (input: Input) => {
       .attr('transform',
             'translate(' + (margin.left) + ',' + margin.top + ')');
 
+  const allXValues = scatterplotData.map(({x}) => x);
+
+  let minX = axisMinMax && axisMinMax.minX !== undefined ? axisMinMax.minX : d3.min(allXValues) as number;
+  let maxX = axisMinMax && axisMinMax.maxX !== undefined ? axisMinMax.maxX : d3.max(allXValues) as number;
+
+
+  const tickMarksForMinMax = (min: number, max: number) => {
+    const digits = min.toString().length + max.toString().length;
+    return digits - 3;
+  }
+
+  if (maxX < 10) {
+    maxX = 10;
+  }
+  if (minX >= 1) {
+    minX = 0.1;
+  }
+  const xScale = d3.scaleLog()
+    .domain([minX, maxX])
+    .range([ 0, scatterplotWidth ])
+    .nice();
+  const numberOfXAxisTicks = tickMarksForMinMax(
+    parseFloat(xScale.invert(0).toFixed(5)),
+    parseFloat(xScale.invert(scatterplotWidth).toFixed(5))
+  );
+  minX = xScale.invert(0);
+  maxX = xScale.invert(scatterplotWidth);
+
   const allYValues = [...scatterplotData, ...beeswarmData].map(({y}) => y);
 
   const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
 
-  const minX = 0.001;
-  const maxX = 256;
   const minY = rawMinY ? Math.floor(rawMinY) : -1;
   const maxY = rawMaxY ? Math.ceil(rawMaxY) : 1;
 
-  const xScale = d3.scaleLog()
-    .domain([minX, maxX])
-    .range([ 0, scatterplotWidth ])
-    .base(2)
-    .nice()
+  // const xScale = d3.scaleLog()
+  //   .domain([minX, maxX])
+  //   .range([ 0, scatterplotWidth ])
+  //   // .base(2)
+  //   .nice() as any
 
   const yScale = d3.scaleLinear()
     .domain([minY, maxY])
@@ -198,6 +224,7 @@ export default (input: Input) => {
     onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
     chartWidth: width,
     radiusAdjuster,
+    numberOfXAxisTicks,
   });
 
 

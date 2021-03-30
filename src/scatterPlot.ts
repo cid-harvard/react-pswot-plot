@@ -31,6 +31,7 @@ interface Input {
   onQuadrantLabelMouseMove: undefined | ((quadrant: {id: string, label: string}, coords: {x: number, y: number}) => void);
   onQuadrantLabelMouseLeave: undefined | ((quadrant: {id: string, label: string}) => void);
   radiusAdjuster: (val: number) => number,
+  numberOfXAxisTicks: number,
 }
 
 const createScatterPlot = (input: Input) => {
@@ -39,7 +40,7 @@ const createScatterPlot = (input: Input) => {
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor, quadrantLabelColor,
     quadrantBackgroundColors, onQuadrantLabelMouseLeave, onQuadrantLabelMouseMove,
-    chartWidth, radiusAdjuster,
+    chartWidth, radiusAdjuster, numberOfXAxisTicks,
   } = input;
 
   if (quadrantBackgroundColors) {
@@ -79,7 +80,7 @@ const createScatterPlot = (input: Input) => {
     .attr('transform', 'translate(0,' + height + ')')
     .call(
       d3.axisBottom(xScale)
-        .ticks(10)
+        .ticks(numberOfXAxisTicks)
         .tickFormat(t => parseFloat((t as number).toFixed(3)) as any)
     )
     xAxis.select('path')
@@ -92,7 +93,7 @@ const createScatterPlot = (input: Input) => {
       .style('font-size', `clamp(7px, ${chartWidth * 0.0175}px, 12px)`)
 
   // gridlines in x axis function
-  const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(10);
+  const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(numberOfXAxisTicks);
 
 
   // gridlines in y axis function
