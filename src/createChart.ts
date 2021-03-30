@@ -49,8 +49,6 @@ export default (input: Input) => {
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
 
-  const filteredBeeswarmData = beeswarmData.filter(d => d.y > 0);
-
   const margin = {top: 30, right: 15, bottom: 60, left: 50};
   const width = size.width - margin.left - margin.right;
   const height = size.height - margin.bottom - margin.top;
@@ -86,7 +84,7 @@ export default (input: Input) => {
       .attr('transform',
             'translate(' + (margin.left) + ',' + margin.top + ')');
 
-  const allYValues = [...scatterplotData, ...filteredBeeswarmData].map(({y}) => y);
+  const allYValues = [...scatterplotData, ...beeswarmData].map(({y}) => y);
 
   const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
@@ -173,7 +171,7 @@ export default (input: Input) => {
 
   createBeeswarm({
     container: beeswarm,
-    data: [...filteredBeeswarmData],
+    data: [...beeswarmData],
     size: {width: beeswarmWidth - margin.right, height},
     xScale, yScale,
     label: quadrantLabels ? quadrantLabels.V : undefined,

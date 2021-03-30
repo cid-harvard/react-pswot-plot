@@ -90,10 +90,10 @@ const createBeeswarm = (input: Input) => {
   }
 
   const multiplier = 1 - ((maxBeeswarmWidth - (width + 30)) / (maxBeeswarmWidth - minBeeswarmWidth));
-  const force = 7 * (1 + multiplier);
+  const force = 6 * (1 + multiplier);
 
   const simulation = d3.forceSimulation(data)
-      .force('x', d3.forceX(width / 2).strength(1))
+      .force('x', d3.forceX(width / 2).strength(9))
       .force("y", d3.forceY(d => yScale(d.y ? d.y + 0 : 0 )))
       .force("collide", d3.forceCollide(force))
       .stop();
