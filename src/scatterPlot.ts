@@ -81,7 +81,7 @@ const createScatterPlot = (input: Input) => {
     .call(
       d3.axisBottom(xScale)
         .ticks(numberOfXAxisTicks)
-        .tickFormat(t => parseFloat((t as number).toFixed(3)) as any)
+        .tickFormat(t => parseFloat((t as number).toFixed(6)) as any)
     )
     xAxis.select('path')
       .attr('stroke', 'none')
