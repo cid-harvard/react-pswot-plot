@@ -95,11 +95,11 @@ export default (input: Input) => {
     return digits - 3;
   }
 
-  if (maxX < 10) {
-    maxX = 10;
+  if (maxX < 100) {
+    maxX = 100;
   }
-  if (minX >= 1) {
-    minX = 0.1;
+  if (minX >= 0.01) {
+    minX = 0.01;
   }
   const xScale = d3.scaleLog()
     .domain([minX, maxX])
