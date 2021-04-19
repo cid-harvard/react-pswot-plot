@@ -95,10 +95,10 @@ export default (input: Input) => {
     return digits - 3;
   }
 
-  if (maxX < 100) {
+  if (maxX < 100 || isNaN(maxX)) {
     maxX = 100;
   }
-  if (minX >= 0.01) {
+  if (minX >= 0.01 || isNaN(minX)) {
     minX = 0.01;
   }
   const xScale = d3.scaleLog()
@@ -117,8 +117,8 @@ export default (input: Input) => {
   const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
 
-  let minY = rawMinY ? Math.floor(rawMinY) : -1;
-  let maxY = rawMaxY ? Math.ceil(rawMaxY) : 1;
+  let minY = rawMinY && !isNaN(rawMinY) ? Math.floor(rawMinY) : -1;
+  let maxY = rawMaxY && !isNaN(rawMaxY) ? Math.ceil(rawMaxY) : 1;
 
   const largerAbsY = Math.abs(minY) > Math.abs(maxY) ? Math.abs(minY) : Math.abs(maxY);
   if (Math.abs(maxY) < largerAbsY / 2) {
@@ -127,12 +127,6 @@ export default (input: Input) => {
   if (Math.abs(minY) < largerAbsY / 2) {
     minY = largerAbsY / -2;
   }
-
-  // const xScale = d3.scaleLog()
-  //   .domain([minX, maxX])
-  //   .range([ 0, scatterplotWidth ])
-  //   // .base(2)
-  //   .nice() as any
 
   const yScale = d3.scaleLinear()
     .domain([minY, maxY])
