@@ -117,8 +117,16 @@ export default (input: Input) => {
   const rawMinY = axisMinMax && axisMinMax.minY !== undefined ? axisMinMax.minY : d3.min(allYValues);
   const rawMaxY = axisMinMax && axisMinMax.maxY !== undefined ? axisMinMax.maxY : d3.max(allYValues);
 
-  const minY = rawMinY ? Math.floor(rawMinY) : -1;
-  const maxY = rawMaxY ? Math.ceil(rawMaxY) : 1;
+  let minY = rawMinY ? Math.floor(rawMinY) : -1;
+  let maxY = rawMaxY ? Math.ceil(rawMaxY) : 1;
+
+  const largerAbsY = Math.abs(minY) > Math.abs(maxY) ? Math.abs(minY) : Math.abs(maxY);
+  if (Math.abs(maxY) < largerAbsY / 2) {
+    maxY = largerAbsY / 2;
+  }
+  if (Math.abs(minY) < largerAbsY / 2) {
+    minY = largerAbsY / -2;
+  }
 
   // const xScale = d3.scaleLog()
   //   .domain([minX, maxX])
