@@ -149,7 +149,6 @@ export default (input: Input) => {
       .style('text-anchor', 'middle')
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
       .style('font-size', axistFontSize)
-      .style('font-weight', '600')
       .style('text-transform', 'uppercase')
 
   bottomAxisLabel.append('tspan')
