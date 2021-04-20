@@ -28,6 +28,7 @@ interface Props {
     left?: string,
     leftUp?: string
     leftDown?: string
+    bottom?: string
     bottomLeft?: string
     bottomRight?: string
   };

@@ -135,8 +135,9 @@ const App = () => {
             left: 'Predicted Density Change',
             leftUp: 'Growing',
             leftDown: 'Decreasing',
-            bottomLeft: 'Low Relative Advantage',
-            bottomRight: 'High Relative Advantage',
+            bottom: 'Relative Advantage',
+            bottomLeft: 'Lower',
+            bottomRight: 'Higher',
           }}
           axisLabelColor={'#333'}
           quadrantLabelColor={'#f69c7c'}

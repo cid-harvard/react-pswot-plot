@@ -51,6 +51,7 @@ The PSwotPlot component takes the following props:
   - **left** *(optional)*: `string`
   - **leftUp** *(optional)*: `string`
   - **leftDown** *(optional)*: `string`
+  - **bottom** *(optional)*: `string`
   - **bottomLeft** *(optional)*: `string`
   - **bottomRight** *(optional)*: `string`
 - **axisMinMax** *(optional)*:

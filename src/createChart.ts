@@ -18,6 +18,7 @@ interface Input {
     left?: string,
     leftUp?: string
     leftDown?: string
+    bottom?: string
     bottomLeft?: string
     bottomRight?: string
   };
@@ -133,39 +134,40 @@ export default (input: Input) => {
     .range([ height, 0]);
   
   // append X axis label
-  const bottomLeftClassName = 'pswot-plot-bottom-left-label';
-  const bottomRightClassName = 'pswot-plot-bottom-right-label';
-  const bottomAxisSpacing = width > 600 ? width * 0.015 : width * 0.00875;
+  const bottomClassName = 'pswot-plot-bottom-label';
   const axistFontSize = `clamp(0.75rem, ${width * 0.015}px, 1rem)`;
   const axisSmallTextFontSize = `clamp(0.75rem, ${width * 0.015}px, 0.875rem)`;
   const arrowRight = ' →';
   const arrowLeft = '← ';
-  scatterplot
-    .append('text')
-      .attr('class', bottomLeftClassName)
-      .attr('y', height + (margin.top * 1.5))
-      .attr('x', width > 400 ? xScale(1) - bottomAxisSpacing : 0)
-      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
-      .style('text-anchor', 'end')
-      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', axistFontSize)
-      .style('font-weight', '600')
-      .style('text-transform', 'uppercase')
-      .text(axisLabels && axisLabels.bottomLeft ? arrowLeft + axisLabels.bottomLeft : '');
-  scatterplot
-    .append('text')
-      .attr('class', bottomRightClassName)
-      .attr('y', height + (margin.top * 1.5))
-      .attr('x', width > 400 ? xScale(1) + bottomAxisSpacing : width - margin.left * 2.25)
-      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
-      .style('text-anchor', width > 400 ? 'start' : 'end')
-      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', axistFontSize)
-      .style('font-weight', '600')
-      .style('text-transform', 'uppercase')
-      .text(axisLabels && axisLabels.bottomRight ? axisLabels.bottomRight + arrowRight : '');
-
   const arrowPadding = width > 600 ? 5 : 1;
+
+  const bottomAxisLabel = scatterplot
+    .append('text')
+      .attr('y', height + (margin.top * 1.5))
+      .attr('x', width > 400 ? xScale(1) : 0)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
+      .style('text-anchor', 'middle')
+      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
+      .style('font-size', axistFontSize)
+      .style('font-weight', '600')
+      .style('text-transform', 'uppercase')
+
+  bottomAxisLabel.append('tspan')
+      .attr('dx', arrowPadding * 3)
+      .style('font-size', axisSmallTextFontSize)
+      .text(axisLabels && axisLabels.bottomLeft ? axisLabels.bottomLeft : '');
+
+  bottomAxisLabel.append('tspan')
+      .attr('class', bottomClassName)
+      .style('font-size', axistFontSize)
+      .style('font-weight', '600')
+      .attr('dx', arrowPadding * 4.5)
+      .text(axisLabels && axisLabels.bottom ? arrowLeft + axisLabels.bottom + arrowRight : '');
+
+  bottomAxisLabel.append('tspan')
+      .attr('dx', arrowPadding * 4.5)
+      .style('font-size', axisSmallTextFontSize)
+      .text(axisLabels && axisLabels.bottomRight ? axisLabels.bottomRight : '');
 
   // append Y axis label
   const leftAxisClassName = 'pswot-plot-left-axis-label';
