@@ -229,6 +229,4 @@ export default (input: Input) => {
     radiusAdjuster,
     numberOfXAxisTicks,
   });
-
-
 };

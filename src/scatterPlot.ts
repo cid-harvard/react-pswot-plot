@@ -2,6 +2,42 @@ import * as d3 from 'd3';
 import {Datum, Dimensions} from './types';
 import {appendQuadrantLabel} from './Utils';
 
+function gcd(a: number, b: number): number {
+  return (b) ? gcd(b, a % b) : a;
+}
+
+const decimalToFraction = function (decimal: number) {
+  let top: number | string    = decimal.toString().replace(/\d+[.]/, '');
+  const bottom: number  = Math.pow(10, top.length);
+  if (decimal > 1) {
+    top  = +top + Math.floor(decimal) * bottom;
+  }
+  const x = gcd(top as number, bottom);
+  return {
+    top    : (top as number / x),
+    bottom  : (bottom / x),
+    display  : (top as number / x) + ':' + (bottom / x)
+  };
+};
+
+
+const formatTicks = (value: number) => {
+  const scaledValue = parseFloat(value.toFixed(6));
+  if (scaledValue >= 1) {
+    return scaledValue + '×';
+  } else {
+    const {top, bottom} = decimalToFraction(scaledValue);
+    return `
+      <tspan
+        style="baseline-shift: super;font-size:smaller;"
+      >${top}</tspan>⁄<tspan
+        style="baseline-shift: sub;font-size:smaller;"
+      >${bottom}</tspan>×
+    `;
+  }
+}
+
+
 interface Input {
   container: d3.Selection<any, unknown, null, undefined>;
   // tooltip: d3.Selection<any, unknown, null, undefined>;
@@ -81,7 +117,7 @@ const createScatterPlot = (input: Input) => {
     .call(
       d3.axisBottom(xScale)
         .ticks(numberOfXAxisTicks)
-        .tickFormat(t => parseFloat((t as number).toFixed(6)) as any)
+        .tickFormat(t => formatTicks(t as number) as any)
     )
     xAxis.select('path')
       .attr('stroke', 'none')
@@ -91,6 +127,7 @@ const createScatterPlot = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', chartWidth < 300 ? 0 : 0.75)
       .style('font-size', `clamp(7px, ${chartWidth * 0.0175}px, 12px)`)
+      .html(d => formatTicks(d as number))
 
   // gridlines in x axis function
   const makeGridlinesX: any = () => d3.axisBottom(xScale).ticks(numberOfXAxisTicks);
