@@ -52,7 +52,7 @@ const createBeeswarm = (input: Input) => {
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", width)
-        .attr("height", yScale(0))
+        .attr("height", height)
         .attr("fill",  quadrantBackgroundColors.V ? quadrantBackgroundColors.V : '#fff')
   }
 
@@ -76,6 +76,17 @@ const createBeeswarm = (input: Input) => {
     .style('pointer-events', 'none')
     .style('opacity', '0.25')
     .style('stroke-dasharray', '3 1')
+
+  // add quadrant lines
+  container.append('line')
+    .attr('x1',0)
+    .attr('x2',width)
+    .attr('y1',yScale(0))
+    .attr('y2',yScale(0))
+    .attr('stroke-width', '2px')
+    .style('pointer-events', 'none')
+    .attr('stroke', '#333');
+
   if (zeroAxisLabel !== undefined) {
     container.append('text')
       .attr('x', 4)
