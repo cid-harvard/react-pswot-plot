@@ -32,7 +32,7 @@ const formatTicks = (value: number) => {
         style="baseline-shift: super;font-size:smaller;"
       >${top}</tspan>⁄<tspan
         style="baseline-shift: sub;font-size:smaller;"
-      >${bottom}</tspan>×
+      >${bottom}</tspan><tspan style="baseline-shift: sub;">×</tspan>
     `;
   }
 }
