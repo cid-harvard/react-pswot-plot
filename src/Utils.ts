@@ -43,3 +43,6 @@ export const appendQuadrantLabel =
           .attr('dx', 0)
           .attr('dy', (_d, i) => i !== 0 ? 15 : 0);
     };
+
+export const cssClamp = (MIN: number, IDEAL: number, MAX: number) =>
+  Math.max(MIN, Math.min(IDEAL, MAX)) + 'px';

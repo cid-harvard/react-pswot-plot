@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import {Datum, Dimensions} from './types';
-import {appendQuadrantLabel} from './Utils';
+import {appendQuadrantLabel, cssClamp} from './Utils';
 
 function gcd(a: number, b: number): number {
   return (b) ? gcd(b, a % b) : a;
@@ -127,7 +127,7 @@ const createScatterPlot = (input: Input) => {
     xAxis.selectAll('text')
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', chartWidth < 300 ? 0 : 0.75)
-      .style('font-size', `clamp(7px, ${chartWidth * 0.0175}px, 12px)`)
+      .style('font-size', cssClamp(7, chartWidth * 0.0175, 12))
       .html(d => formatTicks(d as number))
 
   // gridlines in x axis function
@@ -183,7 +183,7 @@ const createScatterPlot = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', `clamp(9px, ${chartWidth * 0.0155}px, 15px)`)
+      .style('font-size', cssClamp(9, chartWidth * 0.0155, 15))
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(averageLineText);
@@ -197,7 +197,7 @@ const createScatterPlot = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', `clamp(9px, ${chartWidth * 0.0155}px, 15px)`)
+      .style('font-size', cssClamp(9, chartWidth * 0.0155, 15))
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(yLineText);
@@ -208,7 +208,7 @@ const createScatterPlot = (input: Input) => {
     const getLabel = appendQuadrantLabel(
       container,
       labelFont,
-      `clamp(8px, ${chartWidth * 0.025}px, 16px)`,
+      cssClamp(8, chartWidth * 0.025, 16),
       quadrantLabelColor,
       onQuadrantLabelMouseMove,
       onQuadrantLabelMouseLeave,

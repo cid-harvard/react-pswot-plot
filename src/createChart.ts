@@ -6,6 +6,7 @@ import createBeeswarm, {
   minBeeswarmWidth,
 } from './beeswarm';
 import {Datum, Dimensions} from './types';
+import {cssClamp} from './Utils';
 
 const minExpectedScreenSize = 820;
 
@@ -137,8 +138,8 @@ export default (input: Input) => {
   
   // append X axis label
   const bottomClassName = 'pswot-plot-bottom-label';
-  const axistFontSize = `clamp(0.75rem, ${width * 0.015}px, 1rem)`;
-  const axisSmallTextFontSize = `clamp(0.75rem, ${width * 0.015}px, 0.875rem)`;
+  const axistFontSize = cssClamp(0.75 * 16, width * 0.015, 16);
+  const axisSmallTextFontSize = cssClamp(0.75 * 16, width * 0.015, 0.875 * 16);
   const arrowRight = ' →';
   const arrowLeft = '← ';
   const arrowPadding = width > 600 ? 5 : 1;

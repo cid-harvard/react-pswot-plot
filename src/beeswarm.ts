@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import {Datum, Dimensions} from './types';
-import {appendQuadrantLabel} from './Utils';
+import {appendQuadrantLabel, cssClamp} from './Utils';
 
 export const maxBeeswarmWidth = 170;
 export const minBeeswarmWidth = 110;
@@ -94,7 +94,7 @@ const createBeeswarm = (input: Input) => {
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
       .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
-      .style('font-size', `clamp(9px, ${chartWidth * 0.0155}px, 15px)`)
+      .style('font-size', cssClamp(9, chartWidth * 0.0155, 15))
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(zeroAxisLabel);
@@ -221,7 +221,7 @@ const createBeeswarm = (input: Input) => {
     const getLabel = appendQuadrantLabel(
       container,
       labelFont,
-      `clamp(8px, ${chartWidth * 0.025}px, 16px)`,
+      cssClamp(8, chartWidth * 0.025, 16),
       quadrantLabelColor,
       onQuadrantLabelMouseMove,
       onQuadrantLabelMouseLeave,
