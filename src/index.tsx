@@ -39,6 +39,7 @@ interface Props {
     maxY?: number,
   };
   averageLineText?: string;
+  yLineText?: string;
   zeroAxisLabel?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   axisLabelColor?: string;
@@ -52,7 +53,7 @@ export const PSwotPlot = (props: Props) => {
   const {
     id, data, axisLabels, axisMinMax, averageLineText, quadrantLabels,
     zeroAxisLabel, axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
-    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave, yLineText,
   } = props;
 
   const sizingNodeRef = useRef<HTMLDivElement | null>(null);
@@ -91,6 +92,7 @@ export const PSwotPlot = (props: Props) => {
         quadrantBackgroundColors,
         onQuadrantLabelMouseMove,
         onQuadrantLabelMouseLeave,
+        yLineText,
       });
     }
     return () => {

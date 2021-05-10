@@ -1,6 +1,6 @@
 {
   "name": "react-pswot-plot",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "React component for creating a SWOT scatterplot with a beeswarm at the zero-axis for Potential",
   "author": "wsoeltz",
   "license": "MIT",

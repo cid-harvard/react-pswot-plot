@@ -59,6 +59,7 @@ interface Input {
     maxY: number,
   };
   averageLineText?: string;
+  yLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string};
   quadrantBackgroundColors?: {I?: string, II?: string, III?: string, IV?: string};
   labelFont?: string;
@@ -76,7 +77,7 @@ const createScatterPlot = (input: Input) => {
     averageLineText, quadrantLabels, labelFont, margin, data, xScale, yScale,
     axisMinMax: {minX, maxX, minY, maxY}, axisLabelColor, quadrantLabelColor,
     quadrantBackgroundColors, onQuadrantLabelMouseLeave, onQuadrantLabelMouseMove,
-    chartWidth, radiusAdjuster, numberOfXAxisTicks,
+    chartWidth, radiusAdjuster, numberOfXAxisTicks, yLineText,
   } = input;
 
   if (quadrantBackgroundColors) {
@@ -186,6 +187,20 @@ const createScatterPlot = (input: Input) => {
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(averageLineText);
+
+  }
+
+  if (yLineText) {
+    container.append('text')
+      .attr('x',8)
+      .attr('y',yScale(0) - 8)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
+      .style('opacity', 0.8)
+      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
+      .style('font-size', `clamp(9px, ${chartWidth * 0.0155}px, 15px)`)
+      .style('font-weight', '600')
+      .style('pointer-events', 'none')
+      .text(yLineText);
 
   }
 

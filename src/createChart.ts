@@ -29,6 +29,7 @@ interface Input {
     maxY?: number,
   };
   averageLineText?: string;
+  yLineText?: string;
   quadrantLabels?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   quadrantBackgroundColors?: {I?: string, II?: string, III?: string, IV?: string, V?: string};
   labelFont?: string;
@@ -46,6 +47,7 @@ export default (input: Input) => {
     zeroAxisLabel, axisLabelColor, quadrantLabelColor,
     quadrantBackgroundColors,
     onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
+    yLineText,
   } = input;
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
@@ -228,5 +230,6 @@ export default (input: Input) => {
     chartWidth: width,
     radiusAdjuster,
     numberOfXAxisTicks,
+    yLineText,
   });
 };
