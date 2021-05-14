@@ -178,7 +178,7 @@ const createScatterPlot = (input: Input) => {
 
   if (averageLineText) {
     container.append('text')
-      .attr('x',xScale(1) + 4)
+      .attr('x',xScale(1) + 24)
       .attr('y',-10)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
@@ -188,11 +188,44 @@ const createScatterPlot = (input: Input) => {
       .style('pointer-events', 'none')
       .text(averageLineText);
 
+    container.append('circle')
+      .attr('cx',xScale(1) + 12)
+      .attr('cy',-14)
+      .attr('r', 6)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
+      .style('pointer-events', 'all')
+      .on('mousemove', () => {
+        if (onQuadrantLabelMouseMove) {
+          onQuadrantLabelMouseMove({
+            id: 'x-axis-average',
+            label: averageLineText
+          }, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+        }
+      })
+      .on('mouseleave', () => {
+        if (onQuadrantLabelMouseLeave) {
+          onQuadrantLabelMouseLeave({
+            id: 'x-axis-average',
+            label: averageLineText
+          })
+        }
+      })
+
+    container.append('text')
+      .attr('x',xScale(1) + 10.5)
+      .attr('y',-9.5)
+      .attr('fill', '#fff')
+      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
+      .style('font-size', 12)
+      .style('font-weight', '600')
+      .style('pointer-events', 'none')
+      .text('i');
+
   }
 
   if (yLineText) {
     container.append('text')
-      .attr('x',8)
+      .attr('x',24)
       .attr('y',yScale(0) - 8)
       .attr('fill', axisLabelColor ? axisLabelColor : '#333')
       .style('opacity', 0.8)
@@ -201,6 +234,39 @@ const createScatterPlot = (input: Input) => {
       .style('font-weight', '600')
       .style('pointer-events', 'none')
       .text(yLineText);
+
+    container.append('circle')
+      .attr('cx',12)
+      .attr('cy',yScale(0)-14)
+      .attr('r', 6)
+      .attr('fill', axisLabelColor ? axisLabelColor : '#333')
+      .style('pointer-events', 'all')
+      .on('mousemove', () => {
+        if (onQuadrantLabelMouseMove) {
+          onQuadrantLabelMouseMove({
+            id: 'y-axis-average',
+            label: yLineText
+          }, {x: (d3 as any).event.pageX, y: (d3 as any).event.pageY})
+        }
+      })
+      .on('mouseleave', () => {
+        if (onQuadrantLabelMouseLeave) {
+          onQuadrantLabelMouseLeave({
+            id: 'y-axis-average',
+            label: yLineText
+          })
+        }
+      })
+
+    container.append('text')
+      .attr('x',10.5)
+      .attr('y',yScale(0)-9.5)
+      .attr('fill', '#fff')
+      .style('font-family', labelFont ? labelFont : "'Source Sans Pro',sans-serif")
+      .style('font-size', 12)
+      .style('font-weight', '600')
+      .style('pointer-events', 'none')
+      .text('i');
 
   }
 

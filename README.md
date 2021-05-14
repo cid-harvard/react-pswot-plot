@@ -60,7 +60,9 @@ The PSwotPlot component takes the following props:
   - **minY** *(optional)*: `number`
   - **maxY** *(optional)*: `number`
 - **averageLineText** *(optional)*: `string`
+- **averageLineTextDesc** *(optional)*: `string`
 - **yLineText** *(optional)*: `string`
+- **yLineTextDesc** *(optional)*: `string`
 - **zeroAxisLabel** *(optional)*: `string`
 - **quadrantLabels** *(optional)*:
   - **I** *(optional)*: `string`
