@@ -15,6 +15,7 @@ interface Input {
   // tooltip: d3.Selection<any, unknown, null, undefined>;
   data: Datum[];
   size: Dimensions;
+  chartTitle: string;
   axisLabels?: {
     left?: string,
     leftUp?: string
@@ -48,7 +49,7 @@ export default (input: Input) => {
     zeroAxisLabel, axisLabelColor, quadrantLabelColor,
     quadrantBackgroundColors,
     onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave,
-    yLineText,
+    yLineText, chartTitle,
   } = input;
 
   const [scatterplotData, beeswarmData] = partition(data, (d) => d.x > 0);
@@ -64,8 +65,13 @@ export default (input: Input) => {
 
   // append the svg object to the body of the page
   svg
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom);
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .attr('aria-labelledby', 'react-pswot-chart-title');
+
+  svg.append('title')
+    .text(chartTitle)
+    .attr('id', 'react-pswot-chart-title');
 
   svg.append("defs").append("marker")
     .attr("id", "arrowhead")

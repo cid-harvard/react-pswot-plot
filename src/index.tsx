@@ -24,6 +24,7 @@ const SizingElm = styled.div`
 interface Props {
   id: string;
   data: Datum[];
+  chartTitle: string;
   axisLabels?: {
     left?: string,
     leftUp?: string
@@ -53,7 +54,7 @@ export const PSwotPlot = (props: Props) => {
   const {
     id, data, axisLabels, axisMinMax, averageLineText, quadrantLabels,
     zeroAxisLabel, axisLabelColor, quadrantLabelColor, quadrantBackgroundColors,
-    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave, yLineText,
+    onQuadrantLabelMouseMove, onQuadrantLabelMouseLeave, yLineText, chartTitle,
   } = props;
 
   const sizingNodeRef = useRef<HTMLDivElement | null>(null);
@@ -92,7 +93,7 @@ export const PSwotPlot = (props: Props) => {
         quadrantBackgroundColors,
         onQuadrantLabelMouseMove,
         onQuadrantLabelMouseLeave,
-        yLineText,
+        yLineText, chartTitle,
       });
     }
     return () => {

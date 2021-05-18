@@ -116,6 +116,7 @@ const App = () => {
           id={'react-pswot-plot-demo'}
           data={data}
           averageLineText={'Relative Advantage = 1'}
+          chartTitle={'SWOT Scatterplot also showing Potential Entrants'}
           yLineText={'Technological Fit = 0'}
           quadrantLabels={{
             I: 'Strength',

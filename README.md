@@ -47,6 +47,7 @@ The PSwotPlot component takes the following props:
 
 - **id**: `string`
 - **data**: [`Datum[]`](#datum)
+- **chartTitle**: `string`
 - **axisLabels** *(optional)*:
   - **left** *(optional)*: `string`
   - **leftUp** *(optional)*: `string`
