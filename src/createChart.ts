@@ -67,11 +67,7 @@ export default (input: Input) => {
   svg
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
-    .attr('aria-labelledby', 'react-pswot-chart-title');
-
-  svg.append('title')
-    .text(chartTitle)
-    .attr('id', 'react-pswot-chart-title');
+    .attr('alt', chartTitle);
 
   svg.append("defs").append("marker")
     .attr("id", "arrowhead")
